@@ -2,19 +2,15 @@
 
 # Log
 
-[Todo: describe what this code file does here, 2022-02-28.]
+Helper to setup logging, print to console/streame and fill a file in ./logs
+
+
+## Classes
+	* GMTFormatter
+
 ## Functions
 	* setup_logging
-
 @package src"""
-
-
-
-
-
-
-
-
 
 import os
 import time

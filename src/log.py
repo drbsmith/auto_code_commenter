@@ -2,8 +2,7 @@
 
 # Log
 
-Helper to setup logging, print to console/streame and fill a file in ./logs
-
+Helper to setup logging, print to console/stream and fill a file in ./logs
 
 ## Classes
 	* GMTFormatter
@@ -12,12 +11,14 @@ Helper to setup logging, print to console/streame and fill a file in ./logs
 	* setup_logging
 @package src"""
 
+
+
 import os
 import time
 import logging
 import logging.config
 
-# switch to True to disable debug prints
+## switch to True to disable debug prints
 DEPLOYED = False
 
 class GMTFormatter(logging.Formatter):

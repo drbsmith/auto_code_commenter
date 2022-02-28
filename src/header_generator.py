@@ -18,10 +18,14 @@ Checks for the presence of a header block (this comment block), and either fills
 	* BuildHeader
 @package src"""
 
-
+## If True inject a rollup of Class definitions in the header block
 INCLUDE_CLASSES = True
+
+## If True inject a rollup of Function definitions in the header block
 INCLUDE_FUNCTIONS = True
 
+## Template used to generate the header block.
+# TODO: move to a file that can be specified without modifying this code.
 HEADER_TEMPLATE = '''"""! @file
 
 # {}
@@ -29,6 +33,7 @@ HEADER_TEMPLATE = '''"""! @file
 [Todo: describe what this code file does here, {}.]
 
 @package {}"""
+
 '''
 
 # Rename original: keeps the original source file with a new suffix
@@ -111,8 +116,12 @@ def FilenameToTitle(fname):
 
 	return title # that was fun, let's go!
 
-def PackageFromFilename(fname):
-	"""! if filename has a folder use that as the package designation
+def PackageFromFilename(fname: str) -> str:
+	"""! 
+	If filename has a folder use that as the package designation.
+
+	@param fname (str): name of file (with path) to extract the package name (enclosing folder).
+	@return (str) the extracted package name, if found in supplied path (fname).
 	"""
 
 	if fname.find('/') == -1:
@@ -190,16 +199,18 @@ def BuildHeader(fname, code_lines):
 	if INCLUDE_CLASSES:
 		classes = RollupClasses(code_lines)
 
-		text += "\n## Classes\n"
-		for f in classes:
-			text += '\t* {}\n'.format(f)
+		if len(classes) > 0:
+			text += "\n## Classes\n"
+			for f in classes:
+				text += '\t* {}\n'.format(f)
 
 	if INCLUDE_FUNCTIONS:
 		funcs = RollupFunctions(code_lines)
 
-		text += "\n## Functions\n"
-		for f in funcs:
-			text += '\t* {}\n'.format(f)
+		if len(funcs) > 0:
+			text += "\n## Functions\n"
+			for f in funcs:
+				text += '\t* {}\n'.format(f)
 
 	if text != '':
 		x = header.find('@package')
