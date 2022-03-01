@@ -232,12 +232,8 @@ if __name__ == '__main__':
 
 	logger.info('scanning for header in file: {}'.format(filename))
 
-	with open(filename, 'r') as f:
-		code_raw = f.read()
-
-	# split into lines.
-	# TODO: check for different encodings, assuming \n is line ending here:
-	code_lines = code_raw.split('\n')
+	from py_parsers import ParsePyScript
+	code_lines, code_raw = ParsePyScript(filename)
 
 	logger.info('read {} bytes over {} lines of code'.format(len(code_raw),len(code_lines)))
 

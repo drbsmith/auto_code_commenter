@@ -1,0 +1,32 @@
+
+
+def ParsePyScript(filename):
+
+	with open(filename, 'r') as f:
+		code_raw = f.read()
+
+	# split into lines.
+	# TODO: check for different encodings, assuming \n is line ending here:
+	code_lines = code_raw.split('\n')
+
+	# if any lines are split over two, join:
+	i = 0
+	ret = []
+	line = ''
+	while i < len(code_lines):
+		cl = code_lines[i]
+		# remove trailing white space
+		while len(cl) > 0 and (cl[-1] == ' ' or cl[-1] == '\t'):
+			cl = cl[:-1]
+
+		if len(cl) > 0 and cl[-1] == '\\': # it's a multi-line
+			line += cl[:-1]
+		else:
+			line += cl
+
+			ret.append(line)
+			line = ''
+
+		i += 1
+
+	return code_lines, code_raw
