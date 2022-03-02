@@ -1,5 +1,5 @@
 
-from util_parsing import StripTrailingWhitespace, StripLeadingWhitespace
+from util.util_parsing import StripTrailingWhitespace, StripLeadingWhitespace, IsComment
 
 def ProfileFunction(code_lines):
 	if len(code_lines) < 1:
@@ -18,8 +18,6 @@ def ProfileFunction(code_lines):
 	# does it return anything?
 	returns = []
 
-	# TODO: skip any @return lines (docs), any # leading lines (comments)
-	from util_parsing import IsComment
 	# does it import anything?
 	imports = []
 	for line in code_lines:
@@ -48,7 +46,7 @@ def _list2str(x):
 	for y in x:
 		out += '{}, '.format(y)
 
-	return out[:-1]
+	return out[:-2]
 
 def ProfileDictToLines(profile_dict):
 	if profile_dict is None:

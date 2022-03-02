@@ -2,14 +2,14 @@
 
 # Py Parsers
 
-[Todo: describe what this code file does here, 2022-02-28.]
-
+Parsing function to break down python files
 
 ## Functions
 	* ParsePyScript
 @package src"""
 
 
+from util.util_parsing import StripTrailingWhitespace, StripLeadingWhitespace
 
 def ParsePyScript(filename):
 	"""!
@@ -26,8 +26,6 @@ def ParsePyScript(filename):
 	* imports: ['from util_parsing import StripTrailingWhitespace, StripLeadingWhitespace']
 	* returns: ['@return (list) lines of code in the order found in the file,', "@return (string) the raw text read from the file.'''", 'return ret, code_raw']
 	"""
-
-	from util_parsing import StripTrailingWhitespace, StripLeadingWhitespace
 
 	with open(filename, 'r') as f:
 		code_raw = f.read()
@@ -90,7 +88,7 @@ def GetIndent(line):
 	"""
 	
 	# return the indentation spacing for the first non-empty line. COULD return an indent for every line included!
-	import util_parsing
+	import util.util_parsing
 
 	# TODO: trap for lines that are whitespace only??
 	if type(line) is list:
@@ -101,7 +99,7 @@ def GetIndent(line):
 	# get first line indentation
 	ind0 = ''
 	line0 = line
-	while len(line0) > 0 and line0[0] in util_parsing.WHITE_SPACE: # (line0[0] == ' ' or line0[0] == '\t'):
+	while len(line0) > 0 and line0[0] in util.util_parsing.WHITE_SPACE: # (line0[0] == ' ' or line0[0] == '\t'):
 		ind0 += line0[0]
 		line0 = line0[1:]
 
@@ -127,7 +125,6 @@ def SetIndent(lines, indent):
 
 	@return TODO: what does it return?
 	"""
-	from util_parsing import StripLeadingWhitespace 
 
 	if lines is None:
 		return None # GIGO

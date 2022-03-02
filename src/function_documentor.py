@@ -20,14 +20,14 @@ INCLUDE_FUNCTION_PROFILE = True
 
 import sys, os
 
-from log import setup_logging
+from util.log import setup_logging
 logger = setup_logging('function_documentor.py')
 
 FUNCTION_TEMPLATE = '''"""!
-TODO-DOC
+TODO_DOC
 
 [PARAMS]
-@return TODO-DOC
+@return TODO_DOC
 [FUNC_PROFILE]
 """
 '''
@@ -109,7 +109,7 @@ def MakeParamBlock(params):
 	out = []
 
 	for param in params:
-		s = "@param {}: TODO-DOC".format(param, param)
+		s = "@param {}: TODO_DOC".format(param, param)
 
 		out.append(s)
 

@@ -3,8 +3,8 @@ var indexSectionsWithContent =
   0: "_bcdefghilmprstu",
   1: "ght",
   2: "s",
-  3: "fhlpu",
-  4: "_bcefgimprs",
+  3: "fhilpu",
+  4: "_bcefgilmprs",
   5: "dfhir"
 };
 
