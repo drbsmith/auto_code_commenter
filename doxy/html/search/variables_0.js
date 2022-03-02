@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['deployed_60',['DEPLOYED',['../log_8py.html#a96712d7e86e07dd99a3f2e6c9c6c7f87',1,'src::log']]]
+  ['deployed_60',['DEPLOYED',['../log_8py.html#a9cc4344d1afdba156c899ea325f51bd6',1,'src::util::log']]]
 ];

@@ -4,7 +4,7 @@
 
 import sys, os
 
-from log import setup_logging
+from util.log import setup_logging
 logger = setup_logging('init_file_creator.py')
 
 FILE_TEMPLATE = '''"""! @package {}
@@ -79,7 +79,7 @@ def main(path):
 
 	logger.info('adding {} modules to the documentation'.format(len(modules)))
 
-	from util_parsing import StripConsecutiveLineEndings
+	from util.util_parsing import StripConsecutiveLineEndings
 
 	with open(path + '__init__.py', 'w') as f:
 		f.write(StripConsecutiveLineEndings(new_file))

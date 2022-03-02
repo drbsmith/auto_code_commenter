@@ -43,7 +43,7 @@ RENAME_ORIGINAL = True
 
 import sys, os
 
-from log import setup_logging
+from util.log import setup_logging
 logger = setup_logging('header_generator.py')
 
 class headerClass():
