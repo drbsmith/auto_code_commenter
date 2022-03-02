@@ -16,7 +16,6 @@ __Multi-lines__: This code base relies on functional single lines of code, and d
 * tease out inline comments to create description?
 * tease out TODO comments and put in header of the file
 * build library of patterns to describe what each line (or block) does.
-* diagnostic tools: scan directory structure and assess missing documentation
 * handle ## vs """ comment blocks?
 * document global variables!
 * scrape for decorators and document in header? or in function doc?

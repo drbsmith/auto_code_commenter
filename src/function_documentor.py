@@ -18,6 +18,9 @@ Scans a .py file, finds any functions missing documentation blocks, parses varia
 
 INCLUDE_FUNCTION_PROFILE = True
 
+## pull inline comments up to function docstring
+INCLUDE_INLINE_COMMENTS = True
+
 import sys, os
 
 from util.log import setup_logging
@@ -25,6 +28,7 @@ logger = setup_logging('function_documentor.py')
 
 FUNCTION_TEMPLATE = '''"""!
 TODO_DOC
+[COMMENTS]
 
 [PARAMS]
 @return TODO_DOC
@@ -33,6 +37,7 @@ TODO_DOC
 '''
 
 from py_parsers import SetIndent, GetIndent
+from util.util_parsing import StripLeadingWhitespace
 
 def FindFunctions(code_lines):
 	"""!
@@ -98,6 +103,17 @@ def ExtractVariables(func_lines):
 
 	return var
 
+def ExtractComments(func_lines):
+	ret = []
+
+	for line in func_lines:
+		if '#' in line:
+			ret.append(StripLeadingWhitespace(line.replace('#', '')))
+
+	if len(ret) == 0:
+		ret = None
+	return ret
+
 def MakeParamBlock(params):
 	"""!
 	TODO: what does this function do?
@@ -117,7 +133,7 @@ def MakeParamBlock(params):
 
 	return out
 
-def BuildFunctionBlock(indent, params=None, profile=None):
+def BuildFunctionBlock(indent, params=None, profile=None, comments=None):
 	"""!
 	TODO: what does this function do?
 	@param indent: TODO: what does indent variable do?
@@ -144,6 +160,14 @@ def BuildFunctionBlock(indent, params=None, profile=None):
 		for i in range(0, len(lines)):
 			if '[FUNC_PROFILE]' in lines[i]:
 				lines[i:i+1] = profile
+
+	if comments is None:
+		lines = [l for l in lines if not '[COMMENTS]' in l]
+	else:
+		# inject comments
+		for i in range(0, len(lines)):
+			if '[COMMENTS]' in lines[i]:
+				lines[i:i+1] = comments
 
 	return(lines)
 
@@ -179,7 +203,13 @@ if __name__ == "__main__":
 				profile = ProfileDictToLines(ProfileFunction(code_lines[i:j]))
 				profile = SetIndent(profile, ind)
 
-			docs = BuildFunctionBlock(ind, params=text, profile=profile)
+			if INCLUDE_INLINE_COMMENTS:
+				comm = ExtractComments(code_lines[i:j])
+				comm = SetIndent(comm, ind)
+			else:
+				comm = None
+
+			docs = BuildFunctionBlock(ind, params=text, profile=profile, comments=comm)
 
 			# Lastly, inject our templated doc block!
 			injects[i] = docs

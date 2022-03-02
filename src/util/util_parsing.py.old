@@ -63,37 +63,14 @@ def IsComment(line: str):
 		return False
 
 def StripConsecutiveLineEndings(text):
-	"""!
-	remove triple line returns and replace with doubles, removes double blank lines
-	
-	@param text: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 5
-	* characters: 196
-	* returns: return text
-	"""
-	
+
+	# remove triple line returns and replace with doubles, removes double blank lines:
 	while '\n\n\n' in text:
 		text = text.replace('\n\n\n', '\n\n')
 
 	return text
 
 def GetFunctionName(func_lines):
-	"""!
-	TODO_DOC
-	pull out the function name from the input function code lines (list of str)
-	
-	@param func_lines: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 10
-	* characters: 269
-	* returns: return  name
-	"""
-	
 	# pull out the function name from the input function code lines (list of str)
 
 	name = None
@@ -105,21 +82,9 @@ def GetFunctionName(func_lines):
 			name = line[s:e].replace(' ', '')
 
 			break
-	return name
+	return  name
 
 def ReplaceTodosWithConfig(text):
-	"""!
-	TODO_DOC
-	
-	@param text: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 7
-	* characters: 289
-	* imports: from util.config import GetGlobalConfig
-	"""
-	
 	from util.config import GetGlobalConfig
 
 	config = GetGlobalConfig()
@@ -130,22 +95,8 @@ def ReplaceTodosWithConfig(text):
 		text = text.replace('TODO_DOC', config['TODO_TAG']['value'])
 
 def MakePostscript():
-	"""!
-	TODO_DOC
-	could be moved to a different module. Not really strictly a parsing util
-	
-	@param : TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 6
-	* characters: 294
-	* imports: from datetime import datetime
-	* returns: return ps
-	"""
-	
 
-
+	
 	# could be moved to a different module. Not really strictly a parsing util
 	from datetime import datetime
 
@@ -153,6 +104,5 @@ def MakePostscript():
 	ps = ps.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 	return ps
-
 
 

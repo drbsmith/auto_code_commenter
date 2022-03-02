@@ -15,6 +15,19 @@ TODO_DOC
 import os, json
 
 def GetGlobalConfig(filename='../acc_config.json'):
+	"""!
+	TODO_DOC
+	
+	@param filename='../acc_config.json': TODO_DOC
+	@return TODO_DOC
+	
+	## Profile
+	* line count: 7
+	* characters: 229
+	* imports: import errno
+	* returns: ret
+	"""
+	
 	import errno
 
 	if not os.exists(filename):

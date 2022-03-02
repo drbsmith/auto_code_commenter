@@ -25,7 +25,7 @@ def ProfileFunction(code_lines):
 			# what?
 			imports.append(StripLeadingWhitespace(line))
 		if 'return' in line and not IsComment(line):
-			returns.append(StripLeadingWhitespace(line))
+			returns.append(StripLeadingWhitespace(line.replace('return', '')))
 
 	if len(imports) > 0:
 		out_dict['imports'] = imports
