@@ -1,0 +1,13 @@
+
+import os, json
+
+def GetGlobalConfig(filename='../acc_config.json'):
+	import errno
+
+	if not os.exists(filename):
+		raise FileNotFoundError(errno.ENOENT, os.sterror(errno.ENOENT), filename)
+
+	with open(filename, 'r') as f:
+		ret = json.load(f)
+
+	return ret

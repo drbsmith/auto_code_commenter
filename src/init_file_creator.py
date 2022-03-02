@@ -23,6 +23,8 @@ TODO_DOC
 
 [MODULES]
 
+[POST]
+
 """'''
 
 def GetModules(files):
@@ -35,7 +37,7 @@ def GetModules(files):
 	## Profile
 	* line count: 3
 	* characters: 110
-	* returns: return mod,
+	* returns: return mod
 	"""
 	
 
@@ -53,7 +55,7 @@ def ListToBullets(files):
 	## Profile
 	* line count: 7
 	* characters: 149
-	* returns: return '', return out,
+	* returns: return '', return out
 	"""
 	
 	if files is None or len(files) < 1:
@@ -105,7 +107,7 @@ def main(path):
 	## Profile
 	* line count: 32
 	* characters: 1040
-	* imports: from util.util_parsing import StripConsecutiveLineEndings,
+	* imports: @see util.util_parsing
 	* returns: return False, return True,
 	"""
 	
@@ -132,13 +134,18 @@ def main(path):
 
 	if retain:
 		new_file = new_file.replace('TODO_DOC', retain)
+	else:
+		from util.util_parsing import ReplaceTodosWithConfig
+		new_file = ReplaceTodosWithConfig(new_file)
 
 	modules = GetModules(things)
 	new_file = new_file.replace('[MODULES]', ListToBullets(modules))
 
 	logger.info('adding {} modules to the documentation'.format(len(modules)))
 
-	from util.util_parsing import StripConsecutiveLineEndings
+	from util.util_parsing import StripConsecutiveLineEndings, MakePostscript
+
+	new_file = new_file.replace('[POST]', MakePostscript())
 
 	with open(path + '__init__.py', 'w') as f:
 		f.write(StripConsecutiveLineEndings(new_file))

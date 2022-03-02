@@ -1,0 +1,11 @@
+{
+	"STYLE": {
+		"value": "doxygen",
+		"description": "The target documentation generation system. Supports 'doxygen' and 'pdocs'."
+	},
+	"TODO_TAG": {
+		"value": "TODO_DOC",
+		"description": "A string placed to indicate manual annotation is needed."
+	}
+
+}

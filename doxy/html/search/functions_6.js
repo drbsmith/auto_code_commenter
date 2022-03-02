@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['iscomment_58',['IsComment',['../util__parsing_8py.html#a5d928b61f9a556c904111594647a2b2f',1,'src::util::util_parsing']]]
+  ['listtobullets_54',['ListToBullets',['../init__file__creator_8py.html#a45e62b2c6dbbcb65bbb7895b0aee83b9',1,'src::init_file_creator']]]
 ];

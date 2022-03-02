@@ -10,10 +10,9 @@ __Multi-lines__: This code base relies on functional single lines of code, and d
 
 ### Todo:
 
-* auto populate "\__init__.py" files with appropriate @package entries and a list for each included file
 * be able to update headers without full erase and replace (to keep anything between the title and the Classes/Functions lists)
-* gen Function comment blocks, with @param and @return boilerplate lines
 * calculate stats for functions and modules: how many lines (each func), how many other calls, dependencies (functions relied on)
+	* 
 * tease out inline comments to create description?
 * tease out TODO comments and put in header of the file
 * build library of patterns to describe what each line (or block) does.
@@ -21,3 +20,5 @@ __Multi-lines__: This code base relies on functional single lines of code, and d
 * handle ## vs """ comment blocks?
 * document global variables!
 * scrape for decorators and document in header? or in function doc?
+* create a subdirectory for each module, keep what each module calls to be able to describe who calls each function
+* Classes: auto doc 'self' variables

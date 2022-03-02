@@ -30,10 +30,11 @@ HEADER_TEMPLATE = '''"""! @file
 
 # {}
 
-[TODO-DOC: describe what this code file does here, {}.]
+TODO_DOC
 
 [CLASSES]
 [FUNCTIONS]
+[POST]
 @package {}"""
 
 '''
@@ -46,16 +47,6 @@ import sys, os
 from util.log import setup_logging
 logger = setup_logging('header_generator.py')
 
-class headerClass():
-	def __init__(self, header):
-		"""!
-		TODO: what does this function do?
-		
-		
-		@return TODO: what does it return?
-		"""
-		
-		self.header = header
 
 def CheckForHeader(lines):
 	"""! the header should be the first thing in the file
@@ -65,7 +56,7 @@ def CheckForHeader(lines):
 	# perform initial cleanup, remove empty lines
 	code = [l for l in lines if l != '']
 
-	header = ''
+	header = None
 	exists = False
 	for x in code:
 		if exists:
@@ -77,7 +68,7 @@ def CheckForHeader(lines):
 			# fully left justified comment block. Should be the file header, but could it be somewhere else in the file?
 			# Todo: confirm it's the header. Is it worse to return nothing or inject a duplicate header?
 			exists = True
-			header += x + '\n'
+			header = x + '\n'
 
 	return header
 
@@ -195,19 +186,14 @@ def MakeHeader(fname):
 	title = FilenameToTitle(fname)
 	package = PackageFromFilename(fname)
 
-	header = HEADER_TEMPLATE.format(title, datetime.today().strftime('%Y-%m-%d'), package)
+	header = HEADER_TEMPLATE.format(title, package)
+
+	from util.util_parsing import MakePostscript
+	header = header.replace('[POST]', MakePostscript())
 
 	return header
 
 def BuildHeader(fname, code_lines):
-	"""!
-	TODO: what does this function do?
-	
-	@param fname: TODO: what does fname variable do?
-	@param code_lines: TODO: what does code_lines variable do?
-	
-	@return TODO: what does it return?
-	"""
 	
 	header = MakeHeader(fname)
 
@@ -233,10 +219,10 @@ def BuildHeader(fname, code_lines):
 
 	return header
 
-if __name__ == '__main__':
+def main():
 	if len(sys.argv) < 2:
 		logger.error('missing required path to file argument')
-		exit()
+		return
 
 	filename = sys.argv[1]
 
@@ -274,3 +260,7 @@ if __name__ == '__main__':
 	with open(filename, 'w') as f:
 		f.write( header + code_raw )
 	logger.info('added new header to {}'.format(filename))
+
+
+if __name__ == '__main__':
+	main()

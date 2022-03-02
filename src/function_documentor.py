@@ -42,25 +42,26 @@ def FindFunctions(code_lines):
 
 	@return a list of indices where each is a line that contains a 'def ' entry indicating a function definition.
 	"""
-
+	from util.util_parsing import StripLeadingWhitespace
 	flines = []
 
 	for line, i in zip(code_lines, range(0,len(code_lines))):
 		# strip leading white space
-		while len(line) > 0 and (line[0] == ' ' or line[0] == '\t'):
-			line = line[1:]
+		line = StripLeadingWhitespace(line)
+
 		# don't use find() because it will pull substrings out of the middle of lines
 		if line[:4] == 'def ':
 			flines.append(i)
 
 	return flines
 
-def CheckForDocumentation( func_lines):
+def CheckForDocumentation(func_lines):
 	"""!
-	TODO: what does this function do?
-	@param func_lines: TODO: what does func_lines variable do?
+	Look through the code lines that define a function and check for the presence of a block docstring.
 
-	@return TODO: what does it return?
+	@param func_lines: (list) lines of code (str) that define a function
+
+	@return True if the docstring is found, False otherwise
 	"""
 
 	if len (func_lines) < 2:
@@ -81,6 +82,7 @@ def ExtractVariables(func_lines):
 	"""
 
 	# func_lines: the definition lines for the whole function
+	# TODO: test that this catches class functions too
 	if func_lines[0][:4] != 'def ':
 		logger.error('first line must be the function definition. Instead it is: {}'.format(func_lines[0]))
 		return
