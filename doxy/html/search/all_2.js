@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['filenametotitle_2',['FilenameToTitle',['../header__generator_8py.html#a10a9a207f21910734a0e540f12d73231',1,'src::header_generator']]]
+  ['checkfordocumentation_3',['CheckForDocumentation',['../function__documentor_8py.html#a171445ea807421957ad470d72a7300e7',1,'src::function_documentor']]],
+  ['checkforheader_4',['CheckForHeader',['../header__generator_8py.html#ab04fb6dbe645ef4297ac67ebb866e0ee',1,'src::header_generator']]]
 ];

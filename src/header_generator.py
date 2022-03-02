@@ -30,13 +30,15 @@ HEADER_TEMPLATE = '''"""! @file
 
 # {}
 
-[Todo: describe what this code file does here, {}.]
+[TODO-DOC: describe what this code file does here, {}.]
 
+[CLASSES]
+[FUNCTIONS]
 @package {}"""
 
 '''
 
-# Rename original: keeps the original source file with a new suffix
+## Rename original: keeps the original source file with a new suffix
 RENAME_ORIGINAL = True
 
 import sys, os
@@ -46,11 +48,18 @@ logger = setup_logging('header_generator.py')
 
 class headerClass():
 	def __init__(self, header):
+		"""!
+		TODO: what does this function do?
+		
+		
+		@return TODO: what does it return?
+		"""
+		
 		self.header = header
 
 def CheckForHeader(lines):
 	"""! the header should be the first thing in the file
-	Look for a complete comment block 
+	Look for a complete comment block
 	"""
 
 	# perform initial cleanup, remove empty lines
@@ -117,7 +126,7 @@ def FilenameToTitle(fname):
 	return title # that was fun, let's go!
 
 def PackageFromFilename(fname: str) -> str:
-	"""! 
+	"""!
 	If filename has a folder use that as the package designation.
 
 	@param fname (str): name of file (with path) to extract the package name (enclosing folder).
@@ -158,10 +167,7 @@ def RollupFunctions(code_lines):
 	return functions
 
 def RollupClasses(code_lines):
-	"""! Go through lines to find class definitions and functions
-
-	Todo: add properties
-	"""
+	# Go through lines to find class definitions and functions
 	# find line numbers for left justified code:
 	left = []
 	for c,i in zip(code_lines, range(0,len(code_lines))):
@@ -176,6 +182,8 @@ def RollupClasses(code_lines):
 			# get name:
 			name = code_lines[i][ 6 : code_lines[i].find('(') ]
 			classes.append(name)
+
+	# TODO: find variables?
 
 	return classes
 
@@ -192,30 +200,36 @@ def MakeHeader(fname):
 	return header
 
 def BuildHeader(fname, code_lines):
+	"""!
+	TODO: what does this function do?
+	
+	@param fname: TODO: what does fname variable do?
+	@param code_lines: TODO: what does code_lines variable do?
+	
+	@return TODO: what does it return?
+	"""
+	
 	header = MakeHeader(fname)
 
 	text = ''
-
 	if INCLUDE_CLASSES:
 		classes = RollupClasses(code_lines)
 
 		if len(classes) > 0:
-			text += "\n## Classes\n"
+			text = "## Classes\n"
 			for f in classes:
 				text += '\t* {}\n'.format(f)
+	header = header.replace('[CLASSES]', text)
 
+	text = ''
 	if INCLUDE_FUNCTIONS:
 		funcs = RollupFunctions(code_lines)
 
 		if len(funcs) > 0:
-			text += "\n## Functions\n"
+			text = "## Functions\n"
 			for f in funcs:
 				text += '\t* {}\n'.format(f)
-
-	if text != '':
-		x = header.find('@package')
-
-		header = header[:x] + text + header[x:]
+	header = header.replace('[FUNCTIONS]', text)
 
 	return header
 
@@ -226,6 +240,7 @@ if __name__ == '__main__':
 
 	filename = sys.argv[1]
 
+	## if True will replace any existing header documentation with a new auto-generated block.
 	FORCE = False
 	if True in [x == '-force' for x in sys.argv]:
 		FORCE = True
@@ -249,12 +264,13 @@ if __name__ == '__main__':
 			exit()
 
 	header = BuildHeader(filename, code_lines)
+	logger.debug(header)
 
-	# move original
-	os.rename(filename, filename + '.old')
-	logger.info('moved original file to {}'.format(filename + '.old'))
+	if RENAME_ORIGINAL:
+		# move original
+		os.rename(filename, filename + '.old')
+		logger.info('moved original file to {}'.format(filename + '.old'))
 
 	with open(filename, 'w') as f:
 		f.write( header + code_raw )
 	logger.info('added new header to {}'.format(filename))
-	logger.debug(header)

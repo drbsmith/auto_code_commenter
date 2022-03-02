@@ -1,0 +1,198 @@
+
+
+
+import sys, os
+
+from log import setup_logging
+logger = setup_logging('function_documentor.py')
+
+FUNCTION_TEMPLATE = '''"""!
+TODO: what does this function do?
+
+[PARAMS]
+@return TODO: what does it return?
+"""
+'''
+
+def FindFunctions(code_lines):
+	"""!
+	Look through lines of code to find any function definitions.
+
+	@param code_lines: A list of strings, where each is a line of code.
+
+	@return a list of indices where each is a line that contains a 'def ' entry indicating a function definition.
+	"""
+
+	flines = []
+
+	for line, i in zip(code_lines, range(0,len(code_lines))):
+		# strip leading white space
+		while len(line) > 0 and (line[0] == ' ' or line[0] == '\t'):
+			line = line[1:]
+		# don't use find() because it will pull substrings out of the middle of lines
+		if line[:4] == 'def ':
+			flines.append(i)
+
+	return flines
+
+def CheckForDocumentation( func_lines):
+	"""!
+	TODO: what does this function do?
+	@param func_lines: TODO: what does func_lines variable do?
+
+	@return TODO: what does it return?
+	"""
+
+	if len (func_lines) < 2:
+		print(func_lines)
+		return False
+	# TODO: could make this test a global, to catch other styles like ##
+	if func_lines[1].find('"""') != -1:
+		return True
+	else:
+		return False
+
+def ExtractVariables(func_lines):
+	"""!
+	TODO: what does this function do?
+	@param func_lines: TODO: what does func_lines variable do?
+
+	@return TODO: what does it return?
+	"""
+
+	# func_lines: the definition lines for the whole function
+	if func_lines[0][:4] != 'def ':
+		logger.error('first line must be the function definition. Instead it is: {}'.format(func_lines[0]))
+		return
+
+	# get everything inside of ( )
+	s = func_lines[0].find('(') + 1
+	e = func_lines[0].find(')')
+
+	var_str = func_lines[0][s:e]
+	var = var_str.replace(' ','').split(',')
+
+	logger.debug('found {} variables for function: "{}"'.format(len(var), func_lines[0]))
+
+	return var
+
+def MakeParamBlock(params):
+	"""!
+	TODO: what does this function do?
+	@param params: TODO: what does params variable do?
+
+	@return TODO: what does it return?
+	"""
+
+	out = []
+
+	for param in params:
+		s = "@param {}: TODO: what does {} variable do?".format(param, param)
+
+		out.append(s)
+
+	return out
+
+def SetIndentation(lines, indent):
+	"""!
+	TODO: what does this function do?
+	@param lines: TODO: what does lines variable do?
+	@param indent: TODO: what does indent variable do?
+
+	@return TODO: what does it return?
+	"""
+
+	# strip leading white space from each line, then prepend indent
+	ret = []
+	for line in lines:
+		while len(line) > 0 and (line[0] == ' ' or line[0] == '\t'):
+			line = line[1:]
+		ret.append(indent + line)
+
+	return ret
+
+def BuildFunctionBlock(indent, params=None):
+	"""!
+	TODO: what does this function do?
+	@param indent: TODO: what does indent variable do?
+	@param params=None: TODO: what does params=None variable do?
+
+	@return TODO: what does it return?
+	"""
+
+	block = FUNCTION_TEMPLATE
+
+	if params != None:
+		# inject parameters
+		p_str = ""
+		for p in params:
+			p_str += p + '\n'
+
+		block = block.replace('[PARAMS]', p_str)
+	else:
+		block = block.replace('[PARAMS]', '') # remove the placeholder
+
+	# split to lines, set indentation, then reassemble as text blob
+	lines = SetIndentation(block.split('\n'), indent)
+	# block = ""
+	# for l in lines:
+	# 	block += l + '\n'
+
+	# print(block)
+	return(lines)
+
+if __name__ == "__main__":
+	if len(sys.argv) < 2:
+		logger.error('missing required path to file argument')
+		exit()
+
+	filename = sys.argv[1]
+
+	from py_parsers import ParsePyScript, GetIndent
+	code_lines, code_raw = ParsePyScript(filename)
+
+	logger.info('read {} bytes over {} lines of code'.format(len(code_raw),len(code_lines)))
+
+	# get all lines that contain a function definition
+	func_lines = FindFunctions(code_lines)
+	func_lines.append(len(code_lines)) # stick EoF on the list
+
+	injects = {}
+	# check each function for an existing comment block
+	for i, j in zip(func_lines[:-1], func_lines[1:]):
+		has_doc = CheckForDocumentation(code_lines[i:j])
+
+		if not has_doc:
+			params = ExtractVariables(code_lines[i:j])
+			text = MakeParamBlock(params)
+			text = SetIndentation(text, GetIndent(code_lines[i+1:j]))
+
+			docs = BuildFunctionBlock(GetIndent(code_lines[i+1:j]), params=text)
+
+			# Lastly, inject our templated doc block!
+			injects[i] = docs
+			# this is tricky in the raw data... we need to find the def Name( and then the closing ):
+
+	write_it = False
+	if len(injects) > 0:
+		idx = list(injects.keys())
+		idx.sort(reverse=True)
+
+		for i in idx:
+			code_lines[i+1:i+1] = injects[i]
+			write_it = True
+
+	# no changes? don't write anything
+	if write_it:
+		# move original
+		os.rename(filename, filename + '.old')
+		logger.info('moved original file to {}'.format(filename + '.old'))
+
+		with open(filename, 'w') as f:
+			for line in code_lines:
+				f.write( line )
+				f.write( '\n' )
+		logger.info('added new function documentation to {}'.format(filename))
+	else:
+		logger.info('no changes were made.')
+

@@ -1,4 +1,22 @@
+"""! @file
 
+# Function Documentor
+
+Scans a .py file, finds any functions missing documentation blocks, parses variables and inserts boilerplate function documentation.
+
+
+## Functions
+	* FindFunctions
+	* CheckForDocumentation
+	* ExtractVariables
+	* MakeParamBlock
+	* SetIndent
+	* BuildFunctionBlock
+
+@package src"""
+
+
+INCLUDE_FUNCTION_PROFILE = True
 
 import sys, os
 
@@ -6,12 +24,25 @@ from log import setup_logging
 logger = setup_logging('function_documentor.py')
 
 FUNCTION_TEMPLATE = '''"""!
-TODO: what does this function do?
-@return TODO: what does it return?
+TODO-DOC
+
+[PARAMS]
+@return TODO-DOC
+[FUNC_PROFILE]
 """
 '''
 
+from py_parsers import SetIndent, GetIndent
+
 def FindFunctions(code_lines):
+	"""!
+	Look through lines of code to find any function definitions.
+
+	@param code_lines: A list of strings, where each is a line of code.
+
+	@return a list of indices where each is a line that contains a 'def ' entry indicating a function definition.
+	"""
+
 	flines = []
 
 	for line, i in zip(code_lines, range(0,len(code_lines))):
@@ -24,9 +55,14 @@ def FindFunctions(code_lines):
 
 	return flines
 
-def CheckForDocumentation( \
-	# this is a comment in the middle of a function def
-	func_lines):
+def CheckForDocumentation( func_lines):
+	"""!
+	TODO: what does this function do?
+	@param func_lines: TODO: what does func_lines variable do?
+
+	@return TODO: what does it return?
+	"""
+
 	if len (func_lines) < 2:
 		print(func_lines)
 		return False
@@ -37,6 +73,13 @@ def CheckForDocumentation( \
 		return False
 
 def ExtractVariables(func_lines):
+	"""!
+	TODO: what does this function do?
+	@param func_lines: TODO: what does func_lines variable do?
+
+	@return TODO: what does it return?
+	"""
+
 	# func_lines: the definition lines for the whole function
 	if func_lines[0][:4] != 'def ':
 		logger.error('first line must be the function definition. Instead it is: {}'.format(func_lines[0]))
@@ -54,46 +97,53 @@ def ExtractVariables(func_lines):
 	return var
 
 def MakeParamBlock(params):
+	"""!
+	TODO: what does this function do?
+	@param params: TODO: what does params variable do?
+
+	@return TODO: what does it return?
+	"""
+	if params is None or len(params) < 1:
+		 return None
+
 	out = []
 
 	for param in params:
-		s = "@param {}: TODO: what does this variable do?".format(param)
+		s = "@param {}: TODO-DOC".format(param, param)
 
 		out.append(s)
 
 	return out
 
-def SetIndentation(lines, indent):
-	# strip leading white space from each line, then prepend indent
-	ret = []
-	for line in lines:
-		while len(line) > 0 and (line[0] == ' ' or line[0] == '\t'):
-			line = line[1:]
-		ret.append(indent + line)
+def BuildFunctionBlock(indent, params=None, profile=None):
+	"""!
+	TODO: what does this function do?
+	@param indent: TODO: what does indent variable do?
+	@param params=None: TODO: what does params=None variable do?
 
-	return ret
+	@return (list) All the lines that make up the documentation block for the function
+	"""
 
-def BuildFunctionBlock(indent, params=None):
-	block = FUNCTION_TEMPLATE
+	lines = SetIndent(FUNCTION_TEMPLATE.split('\n'), indent)
 
-	if params != None:
+	if params is None:
+		lines = [l for l in lines if not '[PARAMS]' in l]
+		#block = block.replace('[PARAMS]', '') # remove the placeholder
+	else:
 		# inject parameters
-		x = block.find('@return')
+		for i in range(0, len(lines)):
+			if '[PARAMS]' in lines[i]:
+				lines[i:i+1] = params
 
-		p_str = ""
-		for p in params:
-			p_str += p + '\n'
+	if profile is None:
+		lines = [l for l in lines if not '[FUNC_PROFILE]' in l]
+	else:
+		# inject profile
+		for i in range(0, len(lines)):
+			if '[FUNC_PROFILE]' in lines[i]:
+				lines[i:i+1] = profile
 
-		block = block[:x] + p_str + block[x:]
-
-	# split to lines, set indentation, then reassemble as text blob
-	lines = SetIndentation(block.split('\n'), indent)
-	block = ""
-	for l in lines:
-		block += l + '\n'
-
-	print(block)
-	return(block)
+	return(lines)
 
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
@@ -111,6 +161,7 @@ if __name__ == "__main__":
 	func_lines = FindFunctions(code_lines)
 	func_lines.append(len(code_lines)) # stick EoF on the list
 
+	injects = {}
 	# check each function for an existing comment block
 	for i, j in zip(func_lines[:-1], func_lines[1:]):
 		has_doc = CheckForDocumentation(code_lines[i:j])
@@ -118,8 +169,41 @@ if __name__ == "__main__":
 		if not has_doc:
 			params = ExtractVariables(code_lines[i:j])
 			text = MakeParamBlock(params)
-			text = SetIndentation(text, GetIndent(code_lines[i+1]))
+			ind = GetIndent(code_lines[i+1:j])
+			text = SetIndent(text, ind)
 
-			BuildFunctionBlock(GetIndent(code_lines[i+1]), params=text)
+			if INCLUDE_FUNCTION_PROFILE:
+				from function_profiler import ProfileFunction, ProfileDictToLines
+				profile = ProfileDictToLines(ProfileFunction(code_lines[i:j]))
+				profile = SetIndent(profile, ind)
+
+			docs = BuildFunctionBlock(ind, params=text, profile=profile)
 
 			# Lastly, inject our templated doc block!
+			injects[i] = docs
+			# this is tricky in the raw data... we need to find the def Name( and then the closing ):
+
+	# if we compiled any injects, stick them in from the last backwards to the first
+	write_it = False
+	if len(injects) > 0:
+		idx = list(injects.keys())
+		idx.sort(reverse=True)
+
+		for i in idx:
+			code_lines[i+1:i+1] = injects[i]
+			write_it = True
+
+	# no changes? don't write anything
+	if write_it:
+		# move original
+		os.rename(filename, filename + '.old')
+		logger.info('moved original file to {}'.format(filename + '.old'))
+
+		with open(filename, 'w') as f:
+			for line in code_lines:
+				f.write( line )
+				f.write( '\n' )
+		logger.info('added new function documentation to {}'.format(filename))
+	else:
+		logger.info('no changes were made.')
+

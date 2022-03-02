@@ -1,10 +1,16 @@
 """! @package src
 
-Source code for the Auto Code Commenter package.
+The primary source package for the Auto Code Commenter
 
 ## Modules
 
-* header_generator.py - creates header block documentation for a supplied .py file
-* log.py - helper for logging all debug/errors to console and .log files
+* function_profiler.py
+* test_documentation.py
+* log.py
+* init_file_creator.py
+* py_parsers.py
+* function_documentor.py
+* header_generator.py
+* util_parsing.py
 
 """

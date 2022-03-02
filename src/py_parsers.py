@@ -12,6 +12,22 @@
 
 
 def ParsePyScript(filename):
+	"""!
+	TODO-DOC: what does this function do?
+
+	@param filename: the path to a .py file to read and parse.
+
+	@return (list) lines of code in the order found in the file,
+	@return (string) the raw text read from the file.
+
+	## Profile
+	* line count: 52
+	* characters: 1400
+	* imports: ['from util_parsing import StripTrailingWhitespace, StripLeadingWhitespace']
+	* returns: ['@return (list) lines of code in the order found in the file,', "@return (string) the raw text read from the file.'''", 'return ret, code_raw']
+	"""
+
+	from util_parsing import StripTrailingWhitespace, StripLeadingWhitespace
 
 	with open(filename, 'r') as f:
 		code_raw = f.read()
@@ -27,14 +43,11 @@ def ParsePyScript(filename):
 	while i < len(code_lines):
 		cl = code_lines[i]
 		# remove trailing white space
-		# TODO: write generic "strip whitespace" function
-		while len(cl) > 0 and (cl[-1] == ' ' or cl[-1] == '\t'):
-			cl = cl[:-1]
+		cl = StripTrailingWhitespace(cl)
 
 		if line != '':
 			# we're appending lines based on a previous trailing \. Strip whitespace, then check that it's not a comment:
-			while len(cl) > 0 and (cl[0] == ' ' or cl[0] == '\t'):
-				cl = cl[1:]
+			cl = StripLeadingWhitespace(cl)
 
 			if cl[0] == '#' or cl[:3] == '"""' or cl[:3] == "'''":
 				i += 1
@@ -46,24 +59,49 @@ def ParsePyScript(filename):
 		else:
 			line += cl
 
+			# test for compound lines. Note: if the semicolon is inside a text string this will break the code
+			while ';' in line:
+				s = line.find(';')
+				ret.append(line[:s])
+				ind = GetIndent(line)
+				line = SetIndent(line[s+1:], ind)[0]
+
 			ret.append(line)
 			line = ''
+
+		# TODO: move comments on a functional line to the next line
 
 		i += 1
 
 	return ret, code_raw
 
 def GetIndent(line):
-	"""! return the indentation spacing for the first line
+	"""!
+	TODO-DOC: what does this function do?
+	
+	@param line: TODO-DOC: what does line variable do?
+	@return TODO-DOC: what does it return?
+	
+	## Profile
+	* line count: 24
+	* characters: 655
+	* imports: ['import util_parsing']
+	* returns: ['# return the indentation spacing for the first non-empty line', 'return ind0']
 	"""
-	# drop empty lines
+	
+	# return the indentation spacing for the first non-empty line. COULD return an indent for every line included!
+	import util_parsing
+
 	# TODO: trap for lines that are whitespace only??
-	# lines = [l for l in lines if l != '']
+	if type(line) is list:
+		# drop empty lines
+		line = [l for l in line if l != '']
+		line = line[0]
 
 	# get first line indentation
 	ind0 = ''
 	line0 = line
-	while line0[0] == ' ' or line0[0] == '\t':
+	while len(line0) > 0 and line0[0] in util_parsing.WHITE_SPACE: # (line0[0] == ' ' or line0[0] == '\t'):
 		ind0 += line0[0]
 		line0 = line0[1:]
 
@@ -79,3 +117,32 @@ def GetIndent(line):
 	# 	ind1 = ind1[1:]
 
 	return ind0
+
+
+def SetIndent(lines, indent):
+	"""!
+	TODO: what does this function do?
+	@param lines: TODO: what does lines variable do?
+	@param indent: TODO: what does indent variable do?
+
+	@return TODO: what does it return?
+	"""
+	from util_parsing import StripLeadingWhitespace 
+
+	if lines is None:
+		return None # GIGO
+	if indent is None:
+		return lines
+	if not type(lines) is list: # if it's a single line convert to list
+		lines = [lines]
+
+	# strip leading white space from each line, then prepend indent
+	ret = []
+	for line in lines:
+		line = StripLeadingWhitespace(line)
+		ret.append(indent + line)
+
+	return ret
+
+
+
