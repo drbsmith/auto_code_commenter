@@ -10,8 +10,7 @@ Parsing function to break down python files
 
 
 
-from util.util_parsing import StripTrailingWhitespace, StripLeadingWhitespace, IsComment, WHITE_SPACE
-
+from util.util_parsing import StripTrailingWhitespace, StripLeadingWhitespace, IsComment
 
 def ParsePyScript(filename):
 
@@ -68,7 +67,7 @@ def ParsePyScript(filename):
 			# 	# cut off the comment part
 			# 	line = line[:comm-1]
 
-			# test for compound lines. Note: if the semicolon is inside a text string this will break the code!! Running this script on itself, for example
+			# test for compound lines. Note: if the semicolon is inside a text string this will break the code
 			# if it's a comment we don't test for compounding
 			if not '#' in line:
 				while ';' in line:

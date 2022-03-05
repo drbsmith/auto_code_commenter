@@ -44,7 +44,10 @@ def StripTrailingWhitespace(line: str):
 
 def IsComment(line: str):
 	"""!
-	TODO-DOC: what does this function do?
+	Test if a string is a python comment.
+
+	TODO: this doesn't check for completion of a triple-quote comment, or if the line is in the middle of a docstring.
+	TODO: also build a "comment is in the middle of the string" that catches hash tags within strings, like '# of comments'
 
 	@param line:str: TODO-DOC: what does line:str do?
 	@return TODO-DOC: what does it return?
@@ -143,8 +146,6 @@ def MakePostscript():
 	* imports: from datetime import datetime
 	* returns: return ps
 	"""
-	
-
 
 	# could be moved to a different module. Not really strictly a parsing util
 	from datetime import datetime

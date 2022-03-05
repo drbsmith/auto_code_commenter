@@ -78,6 +78,18 @@ def CheckForDocumentation(func_lines):
 	else:
 		return False
 
+def RemoveDocumentation(func_lines):
+	code = '\n'.join(func_lines)
+
+	s = code.find('"""!')
+	e = code[s+4:].find('"""') + (s+4) + 3
+
+	ret = code[:s] + code[e:]
+
+	ret = code.split('\n')
+
+	return ret
+
 def ExtractVariables(func_lines):
 	"""!
 	TODO: what does this function do?
@@ -108,10 +120,12 @@ def ExtractComments(func_lines):
 
 	for line in func_lines:
 		if '#' in line:
-			ret.append(StripLeadingWhitespace(line.replace('#', '')))
+			ret.append('* ' + StripLeadingWhitespace(line.replace('#', '')))
 
 	if len(ret) == 0:
 		ret = None
+	else:
+		ret[0:0] = ['## Comments']
 	return ret
 
 def MakeParamBlock(params):
@@ -171,12 +185,7 @@ def BuildFunctionBlock(indent, params=None, profile=None, comments=None):
 
 	return(lines)
 
-if __name__ == "__main__":
-	if len(sys.argv) < 2:
-		logger.error('missing required path to file argument')
-		exit()
-
-	filename = sys.argv[1]
+def main(filename, FORCE=False):
 
 	from py_parsers import ParsePyScript, GetIndent
 	code_lines, code_raw = ParsePyScript(filename)
@@ -190,21 +199,26 @@ if __name__ == "__main__":
 	injects = {}
 	# check each function for an existing comment block
 	for i, j in zip(func_lines[:-1], func_lines[1:]):
-		has_doc = CheckForDocumentation(code_lines[i:j])
+		flines = code_lines[i:j]
+		has_doc = CheckForDocumentation(flines)
+
+		if has_doc and FORCE:
+			flines = RemoveDocumentation(flines)
+			has_doc = False
 
 		if not has_doc:
-			params = ExtractVariables(code_lines[i:j])
+			params = ExtractVariables(flines)
 			text = MakeParamBlock(params)
-			ind = GetIndent(code_lines[i+1:j])
+			ind = GetIndent(flines[1:])
 			text = SetIndent(text, ind)
 
 			if INCLUDE_FUNCTION_PROFILE:
 				from function_profiler import ProfileFunction, ProfileDictToLines
-				profile = ProfileDictToLines(ProfileFunction(code_lines[i:j]))
+				profile = ProfileDictToLines(ProfileFunction(flines))
 				profile = SetIndent(profile, ind)
 
 			if INCLUDE_INLINE_COMMENTS:
-				comm = ExtractComments(code_lines[i:j])
+				comm = ExtractComments(flines)
 				comm = SetIndent(comm, ind)
 			else:
 				comm = None
@@ -239,3 +253,13 @@ if __name__ == "__main__":
 	else:
 		logger.info('no changes were made.')
 
+if __name__ == "__main__":
+	if len(sys.argv) < 2:
+		logger.error('missing required path to file argument')
+		exit()
+
+	filename = sys.argv[1]
+
+	FORCE = '-force' in sys.argv
+
+	main(filename, FORCE)
