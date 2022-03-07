@@ -14,37 +14,38 @@ from util.util_parsing import WHITE_SPACE
 
 class CodeLine():
 	def __init__(self, line: str):
-		self.line = line
+		if type(line) is str:
+			self.line = line
+		elif type(line) is CodeLine:
+			self.line = line.line
+
 		self.type = 'line'
+
 		self.indentLevel = None
-		# if we every modify our own line we need to redo this too:
+		# if we ever modify our own line we need to redo this too:
 		self.indentLevel = self.getIndentLevel()
+
+		self.parent = None
+		self.inDocString = False
 	def __str__(self):
 		return self.line
 	def __copy__(self):
 		return CodeLine(self.line)
+	def __len__(self):
+		return len(self.line)
 
-	def split(self, delim=';'):
-		if delim in self.line:
-			line0 = self.line
-			ret = []
-			while delim in line0:
-				x = line0.find(delim)
-
-				ret.append(CodeLine(line0[:x]))
-				line0 = line0[x+1:]
-			ret.append(CodeLine(line0))
-			return ret
-		else:
-			return self
+	def setDocstring(self, flag):
+		self.inDocString = flag
 
 	def indent(self, tab=None):
 		if tab is None:
 			return self.line[ : self.getIndentLevel()]
 		else:
-			line0 = CodeLine.removeLeadingWhitespace(self.line)
-
-			return CodeLine(tab + line0)
+			if self.inDocString:
+				return CodeLine(self.line)
+			else:
+				line0 = CodeLine.removeLeadingWhitespace(self.line)
+				return CodeLine(tab + line0)
 
 	def getIndentLevel(self):
 		"""! How many indent levels are at the start of this line? """
@@ -55,8 +56,7 @@ class CodeLine():
 				return self.indentLevel
 			else:
 				# calculate it
-				line0 = self.line
-				lvl = 0
+				line0 = self.line; lvl = 0
 				while len(line0) > 0 and line0[0] in WHITE_SPACE:
 					lvl += 1
 					line0 = line0[1:]
@@ -66,6 +66,80 @@ class CodeLine():
 		line0 = CodeLine.removeLeadingWhitespace(self.line)
 
 		return (line0[0] == '#' or line0[:3] == '"""' or line0[:3] == "'''")
+
+	def split(self, delim=';'):
+		if delim in self.line:
+			line0 = self.line; ret = []
+
+			# get all occurrences
+			idx = [i for i, ltr in enumerate(line0) if ltr == delim]
+
+			cum_sum = 0 # use a cumulative sum to adjust indecies as we trim down the string
+			for x in idx:
+				# is it in a string or comment?
+				if not CodeLine.inLiteral(line0, x-cum_sum) and not CodeLine.inComment(line0, x-cum_sum):
+					ret.append(CodeLine(line0[:x-cum_sum]))
+					line0 = line0[x+1-cum_sum:] # trim the part we are splitting off
+					cum_sum += x+1
+				else:
+					# skip this one ';' but keep ; on looking
+					pass
+
+			ret.append(CodeLine(line0))
+
+			# clean up: set all to the same indent as the first:
+			ind = ret[0].indent()
+			ret = [x.indent(ind) for x in ret]
+			return ret
+		else:
+			return self.line
+
+	@classmethod
+	def inComment(cls, line, pos):
+		"""! test if a position in a string is within a comment (or docstring) """
+		if pos > len(line) or pos < 0:
+			return False
+
+		if '#' in line: # test for cases like this, where the # is in a literal, followed by an actual comment
+			# sub_lines = CodeLine(line).split('#') # this is a quick solution, but we need to call inComment from split..
+
+			# get all occurrences
+			ht = [i for i, ltr in enumerate(line) if ltr == '#']
+
+			for i in ht:
+				# find first hash not in a literal, it must be the start of a comment:
+				if not CodeLine.inLiteral(line, i):
+					if pos < i:
+						return False
+					else:
+						return True
+
+			if pos > len(sub_lines[0]):
+				return True
+
+		return False
+
+	@classmethod
+	def inLiteral(cls, line, pos):
+		"""! Test if a specified position in a string is within a string literal. 
+		Note: Due to the way the in/out signal flips it will report the opening char of a literal as 'in' but the terminating char as 'out'. Think of it as reporting the backside of the character's position, while the literal exists on the leading side of the terminating char.
+		"""
+		if pos > len(line) or pos < 0:
+			return False
+
+		in_literal, literal_type = False, None
+		for i in range(0, pos+1):
+			if (line[i] == '"' or line[i] == "'") and (line[i] == literal_type or literal_type is None):
+				in_literal = not in_literal
+				if not in_literal:
+					literal_type = None
+				else:
+					literal_type = line[i]
+
+			if i == pos:
+				return in_literal
+
+		return False
 
 	@classmethod
 	def removeLeadingWhitespace(cls, line):

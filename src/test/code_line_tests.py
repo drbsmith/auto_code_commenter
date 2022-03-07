@@ -10,11 +10,11 @@ def testCodeLine():
 	from python_code.CodeLine import CodeLine
 
 	x = CodeLine('def function():')
-	y = CodeLine('	x = 1; y = 2; z = "c"')
+	y = CodeLine('	x = 1; y = ";"; z = "c"')
 
 	# cast to str
 	assert(str(x) == 'def function():')
-	assert(str(y) == '	x = 1; y = 2; z = "c"')
+	assert(str(y) == '	x = 1; y = ";"; z = "c"')
 
 	z = y.split()
 	assert(len(z) == 3)
@@ -27,6 +27,21 @@ def testCodeLine():
 	assert( not x.isComment() )
 	x = CodeLine('	# some comments')
 	assert( x.isComment() )
+
+	x = CodeLine("if '#' in line: # test for cases like this, where the # is in a literal, followed by an actual comment")
+	assert(not CodeLine.inComment(x.line, 2))
+	assert(not CodeLine.inComment(x.line, 10))
+	assert(CodeLine.inComment(x.line, 20))
+	assert(CodeLine.inComment(x.line, 40))
+
+	# in literals
+	assert(not CodeLine.inLiteral('nothing', 3))
+	assert(CodeLine.inLiteral('"everything"', 4))
+	assert(not CodeLine.inLiteral('0"1"23456789', 5))
+	s = "out''' doc string ''' out again"
+	assert(CodeLine.inLiteral(s, 10))
+	assert(not CodeLine.inLiteral(s, 2))
+	assert(not CodeLine.inLiteral(s, 25))
 
 	print('CodeLine class passed all tests.')
 
@@ -62,7 +77,7 @@ def main():
 	from python_code.CodeBlock import CodeBlock
 
 	cb = CodeBlock.ParsePython(code)
-	
+
 
 	testCodeLine()
 

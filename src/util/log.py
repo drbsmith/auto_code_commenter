@@ -24,7 +24,7 @@ DEPLOYED = False
 class GMTFormatter(logging.Formatter):
     converter = time.gmtime
 
-def setup_logging(filename: str = 'auto_code_commenter'):
+def setup_logging(filename: str = __file__):
     lowest_level = 'DEBUG'
     if DEPLOYED:
         lowest_level = 'INFO'

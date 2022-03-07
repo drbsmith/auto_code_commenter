@@ -24,7 +24,7 @@ INCLUDE_INLINE_COMMENTS = True
 import sys, os
 
 from util.log import setup_logging
-logger = setup_logging('function_documentor.py')
+logger = setup_logging()
 
 FUNCTION_TEMPLATE = '''"""!
 TODO_DOC
