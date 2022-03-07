@@ -37,13 +37,29 @@ class CodeBlock():
 
 	def _set_docstrings(self):
 		"""! go through our items and tell each one inside a docstring of their membership. """
+
+		docs = ['"""', "'''"] # the two variants of doc string tags
 		docstring = False
 		for item in self.block:
 			if type(item) is CodeLine:
 				item.setDocstring(docstring)
-				if '"""' in item.line or "'''" in item.line:
-					# if both open and close are in the same line this won't work...
-					docstring = not docstring
+				for tag in docs:
+					if tag in item.line:
+						line0 = item.line
+
+						# count how many times they show up. Even is closed (or reopened), odd is opening
+						ct = 0
+						while tag in line0:
+							x = line0.find(tag)
+							if not CodeLine.inLiteral(line0, x):
+								ct += 1
+							line0 = line0[x+3:]
+
+						if ct % 2 == 1:
+							docstring = not docstring
+							break # have to check the other one... but it could be inside??
+						else: # it has a complete string in one line (or it closes and opens again). If it opens another one on the outside... just say we can't handle it?
+							break
 
 	def indent(self, tab=''):
 		"""! Correct or reformat the indentation of the block. The block does not know if it is inside another block.
@@ -54,9 +70,17 @@ class CodeBlock():
 		"""
 		if not tab is None:
 			# add tab to each item
-			block = [x.indent(tab+DEFAULT_INDENT) for x in self.block]
-			# first line has no indentation:
-			block[0] = block[0].indent(tab)
+			block = []
+			for item in self.block:
+				block.append(item.indent(tab))
+
+				# trailing colon, specifying an indented block?
+				if type(item) is CodeLine and len(item) > 0 and not item.inDocString and CodeLine.removeTrailingWhitespace(item).find(':') == len(item) - 1:
+					tab += DEFAULT_INDENT
+
+			# block = [x.indent(tab+DEFAULT_INDENT) for x in self.block]
+			# # first line has no indentation:
+			# block[0] = block[0].indent(tab)
 
 			return CodeBlock(block)
 		else:
@@ -65,6 +89,9 @@ class CodeBlock():
 
 	@classmethod
 	def __split_lines(cls, lines):
+		"""! 
+		@param lines: list of strings to parse
+		@return (CodeBlock, int) The root CodeBlock and a count of how many lines were processed. """
 		indents = [l.getIndentLevel() for l in lines]
 
 		items = []
@@ -106,9 +133,9 @@ class CodeBlock():
 					i += 1
 					line = line[:-1] + CodeLine.removeLeadingWhitespace(lines[i])
 
-			# handle midline ;. CodeLine.split takes care of in literals/comments vs functional ;
-			# TODO: this appears to add an extra carriage return. Parsing this script puts an extra line ^ there
+			# TODO: this appears to add an extra carriage return. Parsing this script puts an extra line here, and indents this comment incorrectly. Taking out these comments indents the if line wrong.
 			if ';' in line:
+				# handle midline ;. CodeLine.split takes care of in literals/comments vs functional ;
 				sub_lines = CodeLine.split(CodeLine(line), ';')
 				cLines += sub_lines
 			else:
@@ -129,7 +156,7 @@ class CodeBlock():
 		#  start new collection of indented lines, or return the list (nested lists) we've built
 		cb, _ = CodeBlock.__split_lines(cLines)
 
-		#cb = cb.indent()
+		cb = cb.indent()
 		print(cb)
 
 		return cb

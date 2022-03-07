@@ -33,6 +33,8 @@ class CodeLine():
 		return CodeLine(self.line)
 	def __len__(self):
 		return len(self.line)
+	def find(self, x):
+		return self.line.find(x)
 
 	def setDocstring(self, flag):
 		self.inDocString = flag
@@ -122,13 +124,16 @@ class CodeLine():
 	@classmethod
 	def inLiteral(cls, line, pos):
 		"""! Test if a specified position in a string is within a string literal. 
-		Note: Due to the way the in/out signal flips it will report the opening char of a literal as 'in' but the terminating char as 'out'. Think of it as reporting the backside of the character's position, while the literal exists on the leading side of the terminating char.
+		Note: Due to the way the in/out signal flips it will report the opening char of a literal as 'out' but the terminating char as 'in'.
 		"""
 		if pos > len(line) or pos < 0:
 			return False
 
 		in_literal, literal_type = False, None
 		for i in range(0, pos+1):
+			if i == pos:
+				return in_literal
+
 			if (line[i] == '"' or line[i] == "'") and (line[i] == literal_type or literal_type is None):
 				in_literal = not in_literal
 				if not in_literal:
@@ -136,13 +141,12 @@ class CodeLine():
 				else:
 					literal_type = line[i]
 
-			if i == pos:
-				return in_literal
-
 		return False
 
 	@classmethod
 	def removeLeadingWhitespace(cls, line):
+		if type(line) is CodeLine:
+			line = line.line
 		while len(line) > 0 and line[0] in WHITE_SPACE:
 			line = line[1:]
 
@@ -150,6 +154,8 @@ class CodeLine():
 
 	@classmethod
 	def removeTrailingWhitespace(cls, line):
+		if type(line) is CodeLine:
+			line = line.line
 		while len(line) > 0 and line[-1] in WHITE_SPACE:
 			line = line[:-1]
 
