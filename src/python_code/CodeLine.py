@@ -96,6 +96,24 @@ class CodeLine():
 		else:
 			return self.line
 
+	def getLastFunctionalPos(self):
+		"""! if we have a combined code & comment line, find the last pre-comment, non-white element """
+		if self.isComment():
+			return None
+		if not '#' in self.line:
+			if self.line == '':
+				return None
+			else:
+				return len(CodeLine.removeTrailingWhitespace(self.line))
+		else:
+			for i in range(len(self.line)-1, 0, -1):
+				if not CodeLine.inComment(self.line, i):
+					line0 = self.line[:i]
+					if len(line0) == 0:
+						return None
+					else:
+						return len(CodeLine.removeTrailingWhitespace(line0))
+
 	@classmethod
 	def inComment(cls, line, pos):
 		"""! test if a position in a string is within a comment (or docstring) """

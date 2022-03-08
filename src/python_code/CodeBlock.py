@@ -25,7 +25,11 @@ class CodeBlock():
 	def __str__(self):
 		ret = ""
 		for b in self.block:
+			if type(b) is CodeBlock:
+				ret += '---- block vvvv\n'
 			ret += '{}\n'.format(str(b)) # the sub block injects its own carriage return and we end up with 2. Maybe check for ending \n in str(b)?
+			if type(b) is CodeBlock:
+				ret += '---- block ^^^^\n'
 		return ret
 
 	def __print__(self):
@@ -75,8 +79,10 @@ class CodeBlock():
 				block.append(item.indent(tab))
 
 				# trailing colon, specifying an indented block?
-				if type(item) is CodeLine and len(item) > 0 and not item.inDocString and CodeLine.removeTrailingWhitespace(item).find(':') == len(item) - 1:
-					tab += DEFAULT_INDENT
+				if type(item) is CodeLine and len(item) > 0 and not item.inDocString:
+					s = item.line[:item.getLastFunctionalPos()]
+					if s[-1] == ':':
+						tab += DEFAULT_INDENT
 
 			# block = [x.indent(tab+DEFAULT_INDENT) for x in self.block]
 			# # first line has no indentation:
@@ -91,25 +97,41 @@ class CodeBlock():
 	def __split_lines(cls, lines):
 		"""! 
 		@param lines: list of strings to parse
-		@return (CodeBlock, int) The root CodeBlock and a count of how many lines were processed. """
+		@return (CodeBlock, int) The root CodeBlock and a count of how many lines were processed. 
+		"""
+
+		# method based on indentation levels.
 		indents = [l.getIndentLevel() for l in lines]
 
 		items = []
-		ind1 = indents[1]
+		ind1 = indents[0]
 		if ind1 is None: ind1 = 0
 
-		i = 1
+		for ind, line, i in zip(indents, lines, range(0,len(lines))): # find first inset line
+			if ind is None or ind == ind1: # get all the same indent, define lines
+				items.append(line)
+			elif ind != ind1 and not ind is None:
+				ind1 = ind
+				break
+
+		i += 1
 		while i < len(lines):
 			if indents[i] is None or ind1 == indents[i]:
 				items.append(lines[i-1])
 				i += 1
-			elif indents[i] > ind1:
-				item, skip = CodeBlock.__split_lines(lines[i-1:])
-				items.append(item)
-				i += skip
-			else: # indents[i] < ind0:
+			elif indents[i] < ind1:
 				items.append(lines[i-1])
 				return CodeBlock(items), i
+			else:  #indents[i] > ind1:
+				cl = CodeLine(lines[i-1])
+				if len(cl) > 0 and cl.line[:cl.getLastFunctionalPos()][-1] == ':':
+					idx = i-1 # check for preceding decorators
+					while indents[idx] == indents[idx-1] and CodeLine.removeLeadingWhitespace(lines[idx-1])[0] == '@':
+						idx -= 1
+
+					item, skip = CodeBlock.__split_lines(lines[idx:])
+					items.append(item)
+					i += skip
 
 		return CodeBlock(items), i
 
@@ -143,10 +165,8 @@ class CodeBlock():
 
 			# handle midline # comments. split them to a different line, or just do lots of 'inComment' calls???
 
-			## TODO: handle decorators. Currently they create an extra \n (does every block create that? when it prints?)
 
 			i += 1
-
 
 		cLines = [CodeLine(l) for l in cLines]
 
