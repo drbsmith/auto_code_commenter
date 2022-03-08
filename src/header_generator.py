@@ -77,12 +77,14 @@ def RemoveHeader(code):
 		if x.find('"""!') > -1:
 			s = i
 		elif x.find('"""') > -1:
-			e = i
+			e = i + 1
 			break
 
-	ret = code[:s] + code[e:]
+	code.delete(s, e)
 
-	return ret
+	# ret = code[:s] + code[e:]
+
+	return code
 
 def FilenameToTitle(fname):
 	"""! try to convert a filename to a title """
@@ -232,9 +234,6 @@ def main():
 
 	from python_code.CodeBlock import CodeBlock
 	code_module = CodeBlock.ParsePython(rawcode)
-
-	# from py_parsers import ParsePyScript
-	# code_lines, code_raw = ParsePyScript(filename)
 
 	logger.info('read {} lines of code at root'.format(len(code_module)))
 

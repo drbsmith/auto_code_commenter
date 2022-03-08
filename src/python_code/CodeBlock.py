@@ -44,6 +44,8 @@ class CodeBlock():
 		return len(self.block)
 	def __getitem__(self, index):
 		return self.block[index]
+	def delete(self, start, end):
+		del self.block[start:end]
 	def find(self, x):
 		# would we actually recursively search, or just return "nope"?
 		return -1
