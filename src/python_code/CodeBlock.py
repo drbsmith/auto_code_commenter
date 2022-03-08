@@ -103,7 +103,8 @@ class CodeBlock():
 		try:
 			while i < len(lines):
 				cl = CodeLine(lines[i])
-				if len(cl) > 0 and cl.line[:cl.getLastFunctionalPos()][-1] == ':':
+				lfchar = cl.line[:cl.getLastFunctionalPos()]
+				if len(lfchar) > 0 and lfchar[-1] == ':':
 					idx = i-1 # check for preceding decorators
 					while indents[idx] == indents[idx-1] and (len(lines[idx-1])==0 or CodeLine.removeLeadingWhitespace(lines[idx-1])[0] == '@'):
 						idx -= 1
