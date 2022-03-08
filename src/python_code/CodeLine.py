@@ -118,6 +118,51 @@ class CodeLine():
 						return 0
 					else:
 						return len(CodeLine.removeTrailingWhitespace(line0))
+
+	def isFunction(self):
+		"""! Test if we are a function definition line """
+		return ("def " in self.line and ":" in self.line)
+	def isClass(self):
+		return ("class " in self.line and ":" in self.line)
+
+	def getFunctionName(self):
+		"""!
+		pull out the function name from the input function code lines (list of str)
+		
+		@param func_lines: TODO_DOC
+		@return TODO_DOC
+		"""
+		line = self.line
+		if not 'def ' in line:
+			return None
+
+		s = line.find('def ')+4
+		e = line.find('(')
+
+		return line[s:e].replace(' ', '')
+	def getClassName(self):
+		"""!
+		pull out the class name from our line
+		
+		@param func_lines: TODO_DOC
+		@return the class name
+		"""
+		line = self.line
+		if not 'class ' in line:
+			return None
+
+		s = line.find('class ')+5
+		e = line.find('(')
+
+		return line[s:e].replace(' ', '')
+
+	def isDecorator(self):
+		line0 = CodeLine.removeLeadingWhitespace(self.line)
+		if len(line0) > 0 and line0[0] == '@':
+			return True
+		else:
+			return False
+
 						
 	@classmethod
 	def inComment(cls, line, pos):

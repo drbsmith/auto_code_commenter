@@ -83,33 +83,6 @@ def StripConsecutiveLineEndings(text):
 
 	return text
 
-def GetFunctionName(func_lines):
-	"""!
-	TODO_DOC
-	pull out the function name from the input function code lines (list of str)
-	
-	@param func_lines: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 10
-	* characters: 269
-	* returns: return  name
-	"""
-	
-	# pull out the function name from the input function code lines (list of str)
-
-	name = None
-	for line in func_lines:
-		if 'def ' in line:
-			s = line.find('def')+3
-			e = line.find('(')
-
-			name = line[s:e].replace(' ', '')
-
-			break
-	return name
-
 def ReplaceTodosWithConfig(text):
 	"""!
 	TODO_DOC

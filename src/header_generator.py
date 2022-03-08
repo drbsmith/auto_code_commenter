@@ -48,34 +48,37 @@ from util.log import setup_logging
 logger = setup_logging('header_generator.py')
 
 
-def CheckForHeader(lines):
+def CheckForHeader(code):
 	"""! the header should be the first thing in the file
 	Look for a complete comment block
 	"""
 
 	# perform initial cleanup, remove empty lines
-	code = [l for l in lines if l != '']
+	# code = [l for l in lines if l != '']
 
 	header = None
 	exists = False
 	for x in code:
 		if exists:
-			header += x + '\n'
+			header.append(x)
 			if x.find('"""') > -1: # end of header
 				break
 		# do this test second to not trigger end test
-		if x[:4] == '"""!':
+		if x.find('"""!') > -1:
 			# fully left justified comment block. Should be the file header, but could it be somewhere else in the file?
-			# Todo: confirm it's the header. Is it worse to return nothing or inject a duplicate header?
 			exists = True
-			header = x + '\n'
+			header = [x]
 
 	return header
 
 def RemoveHeader(code):
-	s = code.find('"""!')
-
-	e = code[s+4:].find('"""') + (s+4) + 3
+	s, e = 0, -1
+	for x, i in zip(code, range(0,len(code))):
+		if x.find('"""!') > -1:
+			s = i
+		elif x.find('"""') > -1:
+			e = i
+			break
 
 	ret = code[:s] + code[e:]
 
@@ -146,32 +149,23 @@ def RollupFunctions(code_lines):
 
 	functions = []
 
-	for line in code_lines:
+	for item in code_lines:
 		# find all lines start with def
-		if line.find('def ') == 0:
-			s = line.find('def ')
-			e = line.find('(')
-
-			name = line[s+4:e]
+		if item.isFunction():
+			name = item.getFunctionName()
 			functions.append(name)
 
 	return functions
 
 def RollupClasses(code_lines):
-	# Go through lines to find class definitions and functions
-	# find line numbers for left justified code:
-	left = []
-	for c,i in zip(code_lines, range(0,len(code_lines))):
-		if len(c) > 0 and c[0] != ' ' and c[0] != '\t':
-			left.append(i)
+	# Go through lines to find class definitions
 
 	classes = []
 
-	# look for 'class ' lines, then we know which lines contain the class definition:
-	for i in left:
-		if code_lines[i][:6] == 'class ':
-			# get name:
-			name = code_lines[i][ 6 : code_lines[i].find('(') ]
+	for item in code_lines:
+		# find all lines start with def
+		if item.isClass():
+			name = item.getClassName()
 			classes.append(name)
 
 	# TODO: find variables?
@@ -233,23 +227,29 @@ def main():
 
 	logger.info('scanning for header in file: {}'.format(filename))
 
-	from py_parsers import ParsePyScript
-	code_lines, code_raw = ParsePyScript(filename)
+	with open(filename, 'r') as f:
+		rawcode = f.read()
 
-	logger.info('read {} bytes over {} lines of code'.format(len(code_raw),len(code_lines)))
+	from python_code.CodeBlock import CodeBlock
+	code_module = CodeBlock.ParsePython(rawcode)
 
-	header = CheckForHeader(code_lines)
+	# from py_parsers import ParsePyScript
+	# code_lines, code_raw = ParsePyScript(filename)
 
-	if header != '':
+	logger.info('read {} lines of code at root'.format(len(code_module)))
+
+	header = CheckForHeader(code_module)
+
+	if not header is None:
 		if FORCE:
 			logger.info('removing header...')
-			code_raw = RemoveHeader(code_raw)
+			code_module = RemoveHeader(code_module)
 		else:
 			logger.warning('found an existing header, run again with -force to replace with a new auto-gen header.')
-			logger.warning(header)
+			logger.warning(CodeBlock(header))  # cast list as CodeBlock to pretty print lines
 			exit()
 
-	header = BuildHeader(filename, code_lines)
+	header = BuildHeader(filename, code_module)
 	logger.debug(header)
 
 	if RENAME_ORIGINAL:
@@ -258,7 +258,7 @@ def main():
 		logger.info('moved original file to {}'.format(filename + '.old'))
 
 	with open(filename, 'w') as f:
-		f.write( header + code_raw )
+		f.write( header + str(code_module) )
 	logger.info('added new header to {}'.format(filename))
 
 

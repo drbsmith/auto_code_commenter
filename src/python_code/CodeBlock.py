@@ -44,6 +44,9 @@ class CodeBlock():
 		return len(self.block)
 	def __getitem__(self, index):
 		return self.block[index]
+	def find(self, x):
+		# would we actually recursively search, or just return "nope"?
+		return -1
 
 	def _set_docstrings(self):
 		"""! go through our items and tell each one inside a docstring of their membership. """
@@ -98,6 +101,31 @@ class CodeBlock():
 		else:
 			# GIGO: return the original, unchanged block
 			return self.block
+
+	def isFunction(self):
+		for item in self.block:
+			# if we hit a line that is not empty, a decorator, or is function we return false
+			if len(item) != 0 and not item.isDecorator() and not item.isFunction():
+				return False
+			elif item.isFunction():
+				return True
+	def isClass(self):
+		for item in self.block:
+			# if we hit a line that is not empty, a decorator, or is function we return false
+			if len(item) != 0 and not item.isDecorator() and not item.isClass():
+				return False
+			elif item.isClass():
+				return True
+	def getFunctionName(self):
+		for item in self.block:
+			name = item.getFunctionName()
+			if name:
+				return name
+	def getClassName(self):
+		for item in self.block:
+			name = item.getClassName()
+			if name:
+				return name
 
 	@classmethod 
 	def __split_module(cls, lines):
@@ -226,7 +254,7 @@ class CodeBlock():
 		#  start new collection of indented lines, or return the list (nested lists) we've built
 		cb, _ = CodeBlock.__split_module(cLines)
 
-		cb = cb.indent()
-		print(cb)
+		# cb = cb.indent()
+		# print(cb)
 
 		return cb

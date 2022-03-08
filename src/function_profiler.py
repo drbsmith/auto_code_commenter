@@ -1,3 +1,12 @@
+"""! @file
+
+# Code Block
+
+Represents one functional block of code (in python usually indicated with a leading line terminated with a colon ':', and all subsequent lines indented one level).
+
+Q: have one list of all lines/blocks, or split into the 'definition' line and then a list of all sub-items? (the indented lines/blocks)
+
+@package python"""
 
 from util.util_parsing import StripTrailingWhitespace, StripLeadingWhitespace, IsComment
 
