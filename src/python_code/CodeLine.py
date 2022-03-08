@@ -67,7 +67,10 @@ class CodeLine():
 	def isComment(self):
 		line0 = CodeLine.removeLeadingWhitespace(self.line)
 
-		return (line0[0] == '#' or line0[:3] == '"""' or line0[:3] == "'''")
+		if line0 == '':
+			return False
+		else:
+			return (line0[0] == '#' or (len(line0)>2 and (line0[:3] == '"""' or line0[:3] == "'''")))
 
 	def split(self, delim=';'):
 		if delim in self.line:
@@ -99,10 +102,10 @@ class CodeLine():
 	def getLastFunctionalPos(self):
 		"""! if we have a combined code & comment line, find the last pre-comment, non-white element """
 		if self.isComment():
-			return None
+			return 0
 		if not '#' in self.line:
 			if self.line == '':
-				return None
+				return 0
 			else:
 				return len(CodeLine.removeTrailingWhitespace(self.line))
 		else:
@@ -110,7 +113,7 @@ class CodeLine():
 				if not CodeLine.inComment(self.line, i):
 					line0 = self.line[:i]
 					if len(line0) == 0:
-						return None
+						return 0
 					else:
 						return len(CodeLine.removeTrailingWhitespace(line0))
 
@@ -133,9 +136,6 @@ class CodeLine():
 						return False
 					else:
 						return True
-
-			if pos > len(sub_lines[0]):
-				return True
 
 		return False
 

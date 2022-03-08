@@ -8,6 +8,7 @@ Q: have one list of all lines/blocks, or split into the 'definition' line and th
 
 @package python"""
 
+import logging
 from python_code.CodeLine import CodeLine
 
 DEFAULT_INDENT = '\t'
@@ -81,7 +82,7 @@ class CodeBlock():
 				# trailing colon, specifying an indented block?
 				if type(item) is CodeLine and len(item) > 0 and not item.inDocString:
 					s = item.line[:item.getLastFunctionalPos()]
-					if s[-1] == ':':
+					if len(s) > 0 and s[-1] == ':':
 						tab += DEFAULT_INDENT
 
 			# block = [x.indent(tab+DEFAULT_INDENT) for x in self.block]
@@ -93,47 +94,87 @@ class CodeBlock():
 			# GIGO: return the original, unchanged block
 			return self.block
 
+	@classmethod 
+	def __split_module(cls, lines):
+		items = []
+		indents = [l.getIndentLevel() for l in lines]
+
+		i = 0
+		try:
+			while i < len(lines):
+				cl = CodeLine(lines[i])
+				if len(cl) > 0 and cl.line[:cl.getLastFunctionalPos()][-1] == ':':
+					idx = i-1 # check for preceding decorators
+					while indents[idx] == indents[idx-1] and (len(lines[idx-1])==0 or CodeLine.removeLeadingWhitespace(lines[idx-1])[0] == '@'):
+						idx -= 1
+						i -= 1
+						items.pop() # remove the last line because we're passing it to the next block
+					item, skip = CodeBlock.__split_lines(lines[idx:])
+					items.append(item)
+					i += skip
+				else: # indents[i] is None or indents[i] == 0:
+					items.append(lines[i])
+					i += 1				
+
+			return CodeBlock(items), i
+		except:
+			logging.error(lines[i], exc_info=True)
+
+
+
 	@classmethod
 	def __split_lines(cls, lines):
 		"""! 
+		In building this, a couple special cases have emerged:
+		* When its the root block, with lots of left aligned code/imports/comments
+		* when it's a class/function def with a line or two (decorators) at one indentation and all the rest in one more
+
 		@param lines: list of strings to parse
 		@return (CodeBlock, int) The root CodeBlock and a count of how many lines were processed. 
 		"""
-
-		# method based on indentation levels.
 		indents = [l.getIndentLevel() for l in lines]
 
+		# get the block's def indentation
 		items = []
-		ind1 = indents[0]
-		if ind1 is None: ind1 = 0
+		ind0 = indents[0]
+		if ind0 is None: # find first not None indent
+			for ind in indents:
+				if not ind is None:
+					ind0 = ind; break
 
-		for ind, line, i in zip(indents, lines, range(0,len(lines))): # find first inset line
-			if ind is None or ind == ind1: # get all the same indent, define lines
+		# get the block def lines and find the block content indentation
+		ind1 = None
+		for ind, line, i in zip(indents, lines, range(0,len(lines))): # walk to the first indented line
+			if ind is None or ind == ind0: # get all the same indent, define lines
 				items.append(line)
-			elif ind != ind1 and not ind is None:
+			elif ind > ind0: # we're in the content lines for this block
 				ind1 = ind
 				break
 
-		i += 1
+		# ind0 is the start indentation, ind1 is the content indent
 		while i < len(lines):
-			if indents[i] is None or ind1 == indents[i]:
-				items.append(lines[i-1])
-				i += 1
-			elif indents[i] < ind1:
-				items.append(lines[i-1])
-				return CodeBlock(items), i
-			else:  #indents[i] > ind1:
-				cl = CodeLine(lines[i-1])
-				if len(cl) > 0 and cl.line[:cl.getLastFunctionalPos()][-1] == ':':
-					idx = i-1 # check for preceding decorators
+			cl = CodeLine(lines[i])
+
+			if not indents[i] is None and indents[i] < ind1:
+				return CodeBlock(items), i-1 	# block ended, return
+			else:
+				lfchar = cl.line[:cl.getLastFunctionalPos()]
+				if len(lfchar) > 0 and lfchar[-1] == ':':
+					# check if it's a new function/block
+					idx = i # check for preceding decorators
 					while indents[idx] == indents[idx-1] and CodeLine.removeLeadingWhitespace(lines[idx-1])[0] == '@':
 						idx -= 1
+						i -= 1
+						items.pop() # remove the last line because we're passing it to the next block
 
 					item, skip = CodeBlock.__split_lines(lines[idx:])
 					items.append(item)
 					i += skip
+				else:
+					items.append(lines[i])
+					i += 1
 
-		return CodeBlock(items), i
+		return CodeBlock(items), i-1
 
 
 
@@ -143,6 +184,8 @@ class CodeBlock():
 		# split string of code into str lines, then convert to our helper class
 		lines = code.split('\n')
 		lines = [CodeLine.removeTrailingWhitespace(l) for l in lines]
+
+		# print(code, '\n')
 
 		i = 0
 		cLines = []
@@ -174,7 +217,7 @@ class CodeBlock():
 		# group lines into hierarchy of blocks
 		# recursive somehow... go down the lines, as long as the indent level is the same between pairs keep collecting, if it changes either
 		#  start new collection of indented lines, or return the list (nested lists) we've built
-		cb, _ = CodeBlock.__split_lines(cLines)
+		cb, _ = CodeBlock.__split_module(cLines)
 
 		cb = cb.indent()
 		print(cb)
