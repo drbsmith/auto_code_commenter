@@ -72,12 +72,14 @@ def testCodeBlock():
 	print('CodeBlock class passed all tests')
 
 def main():
-	with open('./src/python_code/CodeBlock.py', 'r') as f:
+	with open('./src/python_code/CodeLine.py', 'r') as f: #   test/parse_this
 		code = f.read()
 	from python_code.CodeBlock import CodeBlock
 
 	cb = CodeBlock.ParsePython(code)
 
+	with open('./src/python_code/CodeLine_redo.py', 'w') as f:
+		f.write(str(cb))
 
 	testCodeLine()
 

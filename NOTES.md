@@ -10,27 +10,9 @@
 * CodeBlock.py: indent is being made part of the set_docstrings block. Why??
 		This is happening when the previous block is more than one indentation level deeper when it ends. The next code then becomes part of the preceding block, rather than a new block.
 
----- block vvvv
-	def __str__(self):
-		ret = ""
----- block vvvv
-		for b in self.block:
----- block vvvv
-			if type(b) is CodeBlock:
-				ret += '---- block vvvv\n'
 
----- block ^^^^
-			ret += '{}\n'.format(str(b)) # the sub block injects its own carriage return and we end up with 2. Maybe check for ending \n in str(b)?
----- block vvvv
-			if type(b) is CodeBlock:
-				ret += '---- block ^^^^\n'
+Broke on CodeLine 106, reads hash as a comment, when inLiteral should be true:
 
----- block ^^^^
-			return ret
-			
-
----- block ^^^^ <-- this should close 2 blocks, for __str__ and then open a new one, but it grabs the next function before closing.
-		def __print__(self):
-			print(str(self))
-
----- block ^^^^
+		if not '#' in self.line:
+		if self.line == '':
+			return 0

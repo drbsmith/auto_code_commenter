@@ -13,6 +13,8 @@ from python_code.CodeLine import CodeLine
 
 DEFAULT_INDENT = '\t'
 
+DEBUG = False
+
 class CodeBlock():
 	def __init__(self, items):
 		self.block = items
@@ -27,10 +29,13 @@ class CodeBlock():
 		ret = ""
 		for b in self.block:
 			if type(b) is CodeBlock:
-				ret += '---- block vvvv\n'
-			ret += '{}\n'.format(str(b)) # the sub block injects its own carriage return and we end up with 2. Maybe check for ending \n in str(b)?
-			if type(b) is CodeBlock:
-				ret += '---- block ^^^^\n'
+				if DEBUG:
+					ret += '---- block vvvv\n'
+				ret += str(b)
+				if DEBUG:
+					ret += '---- block ^^^^\n'
+			else:
+				ret += '{}\n'.format(str(b)) # the sub block injects its own carriage return and we end up with 2. Maybe check for ending \n in str(b)?
 		return ret
 
 	def __print__(self):
@@ -105,7 +110,7 @@ class CodeBlock():
 				cl = CodeLine(lines[i])
 				lfchar = cl.line[:cl.getLastFunctionalPos()]
 				if len(lfchar) > 0 and lfchar[-1] == ':':
-					idx = i-1 # check for preceding decorators
+					idx = i # check for preceding decorators
 					while indents[idx] == indents[idx-1] and (len(lines[idx-1])==0 or CodeLine.removeLeadingWhitespace(lines[idx-1])[0] == '@'):
 						idx -= 1
 						i -= 1
@@ -157,9 +162,10 @@ class CodeBlock():
 			cl = CodeLine(lines[i])
 
 			if not indents[i] is None and indents[i] < ind1:
-				return CodeBlock(items), i-1 	# block ended, return
+				return CodeBlock(items), i 	# block ended, return
 			else:
 				lfchar = cl.line[:cl.getLastFunctionalPos()]
+
 				if len(lfchar) > 0 and lfchar[-1] == ':':
 					# check if it's a new function/block
 					idx = i # check for preceding decorators
@@ -175,7 +181,7 @@ class CodeBlock():
 					items.append(lines[i])
 					i += 1
 
-		return CodeBlock(items), i-1
+		return CodeBlock(items), i
 
 
 

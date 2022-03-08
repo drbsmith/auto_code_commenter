@@ -18,13 +18,13 @@ class CodeLine():
 			self.line = line
 		elif type(line) is CodeLine:
 			self.line = line.line
-			
+
 		self.type = 'line'
-		
+
 		self.indentLevel = None
 		# if we ever modify our own line we need to redo this too:
 		self.indentLevel = self.getIndentLevel()
-		
+
 		self.parent = None
 		self.inDocString = False
 	def __str__(self):
@@ -35,10 +35,10 @@ class CodeLine():
 		return len(self.line)
 	def find(self, x):
 		return self.line.find(x)
-		
+
 	def setDocstring(self, flag):
 		self.inDocString = flag
-		
+
 	def indent(self, tab=None):
 		if tab is None:
 			return self.line[ : self.getIndentLevel()]
@@ -48,7 +48,7 @@ class CodeLine():
 			else:
 				line0 = CodeLine.removeLeadingWhitespace(self.line)
 				return CodeLine(tab + line0)
-				
+
 	def getIndentLevel(self):
 		"""! How many indent levels are at the start of this line? """
 		if self.line == '':
@@ -58,29 +58,27 @@ class CodeLine():
 				return self.indentLevel
 			else:
 				# calculate it
-				line0 = self.line
-				lvl = 0
+				line0 = self.line; lvl = 0
 				while len(line0) > 0 and line0[0] in WHITE_SPACE:
 					lvl += 1
 					line0 = line0[1:]
 				return lvl
-				
+
 	def isComment(self):
 		line0 = CodeLine.removeLeadingWhitespace(self.line)
-		
+
 		if line0 == '':
 			return False
 		else:
 			return (line0[0] == '#' or (len(line0)>2 and (line0[:3] == '"""' or line0[:3] == "'''")))
-			
+
 	def split(self, delim=';'):
 		if delim in self.line:
-			line0 = self.line
-			ret = []
-			
+			line0 = self.line; ret = []
+
 			# get all occurrences
 			idx = [i for i, ltr in enumerate(line0) if ltr == delim]
-			
+
 			cum_sum = 0 # use a cumulative sum to adjust indecies as we trim down the string
 			for x in idx:
 				# is it in a string or comment?
@@ -91,16 +89,16 @@ class CodeLine():
 				else:
 					# skip this one ';' but keep ; on looking
 					pass
-					
+
 			ret.append(CodeLine(line0))
-			
+
 			# clean up: set all to the same indent as the first:
 			ind = ret[0].indent()
 			ret = [x.indent(ind) for x in ret]
 			return ret
 		else:
 			return self.line
-			
+
 	def getLastFunctionalPos(self):
 		"""! if we have a combined code & comment line, find the last pre-comment, non-white element """
 		if self.isComment():
@@ -118,19 +116,19 @@ class CodeLine():
 						return 0
 					else:
 						return len(CodeLine.removeTrailingWhitespace(line0))
-						
+
 	@classmethod
 	def inComment(cls, line, pos):
 		"""! test if a position in a string is within a comment (or docstring) """
 		if pos > len(line) or pos < 0:
 			return False
-			
+
 		if '#' in line: # test for cases like this, where the # is in a literal, followed by an actual comment
 			# sub_lines = CodeLine(line).split('#') # this is a quick solution, but we need to call inComment from split..
-			
+
 			# get all occurrences
 			ht = [i for i, ltr in enumerate(line) if ltr == '#']
-			
+
 			for i in ht:
 				# find first hash not in a literal, it must be the start of a comment:
 				if not CodeLine.inLiteral(line, i):
@@ -138,45 +136,45 @@ class CodeLine():
 						return False
 					else:
 						return True
-						
+
 		return False
-		
+
 	@classmethod
 	def inLiteral(cls, line, pos):
-		"""! Test if a specified position in a string is within a string literal.
+		"""! Test if a specified position in a string is within a string literal. 
 		Note: Due to the way the in/out signal flips it will report the opening char of a literal as 'out' but the terminating char as 'in'.
 		"""
 		if pos > len(line) or pos < 0:
 			return False
-			
+
 		in_literal, literal_type = False, None
 		for i in range(0, pos+1):
 			if i == pos:
 				return in_literal
-				
+
 			if (line[i] == '"' or line[i] == "'") and (line[i] == literal_type or literal_type is None):
 				in_literal = not in_literal
 				if not in_literal:
 					literal_type = None
 				else:
 					literal_type = line[i]
-					
+
 		return False
-		
+
 	@classmethod
 	def removeLeadingWhitespace(cls, line):
 		if type(line) is CodeLine:
 			line = line.line
 		while len(line) > 0 and line[0] in WHITE_SPACE:
 			line = line[1:]
-			
+
 		return line
-		
+
 	@classmethod
 	def removeTrailingWhitespace(cls, line):
 		if type(line) is CodeLine:
 			line = line.line
 		while len(line) > 0 and line[-1] in WHITE_SPACE:
 			line = line[:-1]
-			
+
 		return line
