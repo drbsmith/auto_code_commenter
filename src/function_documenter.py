@@ -47,16 +47,19 @@ def FindFunctions(code_lines):
 
 	@return a list of indices where each is a line that contains a 'def ' entry indicating a function definition.
 	"""
-	from util.util_parsing import StripLeadingWhitespace
+	# from util.util_parsing import StripLeadingWhitespace
 	flines = []
 
 	for line, i in zip(code_lines, range(0,len(code_lines))):
-		# strip leading white space
-		line = StripLeadingWhitespace(line)
-
-		# don't use find() because it will pull substrings out of the middle of lines
-		if line[:4] == 'def ':
+		if line.isFunction():
 			flines.append(i)
+			
+		# # strip leading white space
+		# line = StripLeadingWhitespace(line)
+
+		# # don't use find() because it will pull substrings out of the middle of lines
+		# if line[:4] == 'def ':
+		# 	flines.append(i)
 
 	return flines
 

@@ -129,6 +129,21 @@ class CodeBlock():
 			if name:
 				return name
 
+	def hasDocumentation(self):
+		"""! Does our block have a doc string in it? """
+		for item in self.block:
+			if item.find('"""!') > -1:
+				return True
+		return False
+
+	def imports(self):
+		from util.util_parsing import flatten
+
+		ret = [x.imports() for x in self.block]
+		ret = [r for r in ret if r]
+		ret = flatten(ret)
+		return ret
+
 	@classmethod 
 	def __split_module(cls, lines):
 		items = []

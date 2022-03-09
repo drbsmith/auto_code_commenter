@@ -24,6 +24,8 @@ INCLUDE_CLASSES = True
 ## If True inject a rollup of Function definitions in the header block
 INCLUDE_FUNCTIONS = True
 
+INCLUDE_PACKAGES = True
+
 ## Template used to generate the header block.
 # TODO: move to a file that can be specified without modifying this code.
 HEADER_TEMPLATE = '''"""! @file
@@ -32,6 +34,7 @@ HEADER_TEMPLATE = '''"""! @file
 
 TODO_DOC
 
+[PACKAGES]
 [CLASSES]
 [FUNCTIONS]
 [POST]
@@ -174,6 +177,14 @@ def RollupClasses(code_lines):
 
 	return classes
 
+def RollupPackages(code_lines):
+	from util.util_parsing import flatten
+	packages = [item.imports() for item in code_lines]
+	packages = [p for p in packages if p]
+	packages = flatten(packages)
+
+	return packages
+
 def MakeHeader(fname):
 	"""! Add the header block
 	"""
@@ -212,6 +223,16 @@ def BuildHeader(fname, code_lines):
 			for f in funcs:
 				text += '\t* {}\n'.format(f)
 	header = header.replace('[FUNCTIONS]', text)
+
+	text = ''
+	if INCLUDE_PACKAGES:
+		imports = RollupPackages(code_lines)
+
+		if len(imports) > 0:
+			text = "## Dependencies\n"
+			for i in imports:
+				text += '\t* {}\n'.format(i)
+	header = header.replace('[PACKAGES]', text)
 
 	return header
 

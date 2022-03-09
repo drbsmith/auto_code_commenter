@@ -24,7 +24,7 @@ DEPLOYED = False
 class GMTFormatter(logging.Formatter):
     converter = time.gmtime
 
-def setup_logging(filename: str = __file__):
+def setup_logging(filename: str = 'auto_code_commenter'):
     lowest_level = 'DEBUG'
     if DEPLOYED:
         lowest_level = 'INFO'
@@ -50,7 +50,7 @@ def setup_logging(filename: str = __file__):
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'level': 'ERROR',
                 'formatter': 'detail',
-                'filename': '../logs/{}.log'.format(filename),
+                'filename': '../../logs/{}.log'.format(filename),
                 'interval': 1,
                 'when': 'midnight',
                 'backupCount': 10,
@@ -61,7 +61,7 @@ def setup_logging(filename: str = __file__):
                 'class': 'logging.handlers.RotatingFileHandler',
                 'level': lowest_level,
                 'formatter': 'detail',
-                'filename': '../logs/{}-{}.log'.format(filename, lowest_level),
+                'filename': '../../logs/{}-{}.log'.format(filename, lowest_level),
                 'maxBytes': 2097152,
                 'backupCount': 10
             }

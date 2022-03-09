@@ -81,10 +81,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab04fb6dbe645ef4297ac67ebb866e0ee"><td class="memItemLeft" align="right" valign="top"><a id="ab04fb6dbe645ef4297ac67ebb866e0ee"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header__generator_8py.html#ab04fb6dbe645ef4297ac67ebb866e0ee">src.header_generator.CheckForHeader</a> (lines)</td></tr>
-<tr class="memdesc:ab04fb6dbe645ef4297ac67ebb866e0ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">the header should be the first thing in the file Look for a complete comment block <br /></td></tr>
-<tr class="separator:ab04fb6dbe645ef4297ac67ebb866e0ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7287755737d6d1057d6ca1367836784b"><td class="memItemLeft" align="right" valign="top"><a id="a7287755737d6d1057d6ca1367836784b"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header__generator_8py.html#a7287755737d6d1057d6ca1367836784b">src.header_generator.CheckForHeader</a> (code)</td></tr>
+<tr class="memdesc:a7287755737d6d1057d6ca1367836784b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the header should be the first thing in the file Look for a complete comment block <br /></td></tr>
+<tr class="separator:a7287755737d6d1057d6ca1367836784b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c3b9d4b3fc963f504fd8a8335809aae"><td class="memItemLeft" align="right" valign="top"><a id="a5c3b9d4b3fc963f504fd8a8335809aae"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>src.header_generator.RemoveHeader</b> (code)</td></tr>
 <tr class="separator:a5c3b9d4b3fc963f504fd8a8335809aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -101,6 +101,9 @@ def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="heade
 <tr class="memitem:a9be9faa733984b99869bd51f74e1f277"><td class="memItemLeft" align="right" valign="top"><a id="a9be9faa733984b99869bd51f74e1f277"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>src.header_generator.RollupClasses</b> (code_lines)</td></tr>
 <tr class="separator:a9be9faa733984b99869bd51f74e1f277"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18f235fd630b4045342fdb7980c9a9d2"><td class="memItemLeft" align="right" valign="top"><a id="a18f235fd630b4045342fdb7980c9a9d2"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>src.header_generator.RollupPackages</b> (code_lines)</td></tr>
+<tr class="separator:a18f235fd630b4045342fdb7980c9a9d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c2181664fd4dbd571664af28a9d3057"><td class="memItemLeft" align="right" valign="top"><a id="a4c2181664fd4dbd571664af28a9d3057"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header__generator_8py.html#a4c2181664fd4dbd571664af28a9d3057">src.header_generator.MakeHeader</a> (fname)</td></tr>
 <tr class="memdesc:a4c2181664fd4dbd571664af28a9d3057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the header block. <br /></td></tr>
@@ -122,6 +125,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="head
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header__generator_8py.html#ac01ae0a526f88379d3b1916b7cb327ff">src.header_generator.INCLUDE_FUNCTIONS</a> = True</td></tr>
 <tr class="memdesc:ac01ae0a526f88379d3b1916b7cb327ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">If True inject a rollup of Function definitions in the header block. <br /></td></tr>
 <tr class="separator:ac01ae0a526f88379d3b1916b7cb327ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cee890e1289ae33ca930fef891060f7"><td class="memItemLeft" align="right" valign="top"><a id="a7cee890e1289ae33ca930fef891060f7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>src.header_generator.INCLUDE_PACKAGES</b> = True</td></tr>
+<tr class="separator:a7cee890e1289ae33ca930fef891060f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51c19a6253e792b82639f17ba3643785"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header__generator_8py.html#a51c19a6253e792b82639f17ba3643785">src.header_generator.HEADER_TEMPLATE</a></td></tr>
 <tr class="memdesc:a51c19a6253e792b82639f17ba3643785"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template used to generate the header block.  <a href="header__generator_8py.html#a51c19a6253e792b82639f17ba3643785">More...</a><br /></td></tr>
 <tr class="separator:a51c19a6253e792b82639f17ba3643785"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -134,15 +140,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="head
 <tr class="separator:a63e6829a2b9b7a8c6d16ad2ea5f4aa54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1><a class="anchor" id="autotoc_md3"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md8"></a>
 Header Generator</h1>
 <p>Checks for the presence of a header block (this comment block), and either fills it in, or replaces it if forced.</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Classes</h2>
 <ul>
 <li>headerClass</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Functions</h2>
 <ul>
 <li>CheckForHeader</li>
@@ -221,12 +227,13 @@ Functions</h2>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="stringliteral">TODO_DOC</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="stringliteral">[CLASSES]</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="stringliteral">[FUNCTIONS]</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="stringliteral">[POST]</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral">@package {}&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral">&#39;&#39;&#39;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="stringliteral">[PACKAGES]</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="stringliteral">[CLASSES]</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="stringliteral">[FUNCTIONS]</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral">[POST]</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">@package {}&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral">&#39;&#39;&#39;</span></div>
 </div><!-- fragment -->
 <p>Template used to generate the header block. </p>
 <p>TODO: move to a file that can be specified without modifying this code. </p>

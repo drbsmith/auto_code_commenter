@@ -163,6 +163,21 @@ class CodeLine():
 		else:
 			return False
 
+	def imports(self):
+		"""! Get any packages imported on our line """
+		if not self.inDocString and 'import ' in self.line:
+			x = self.line.find('import ')
+			if not CodeLine.inComment(self.line, x) and not CodeLine.inLiteral(self.line, x):
+				# it's a functional import. Now check for a 'from' clause
+				if 'from ' in self.line:
+					y = self.line.find('from ')
+					if x > y:
+						return self.line[y+5:x-1]
+					# else it is in a comment. ignore it
+				else:
+					y = self.getLastFunctionalPos() #  if there is a trailing comment on the line we'll ignore it
+					return self.line[x+7:y]
+		return None
 						
 	@classmethod
 	def inComment(cls, line, pos):

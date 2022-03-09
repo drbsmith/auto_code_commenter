@@ -14,7 +14,7 @@ TODO_DOC
 
 import os, json
 
-def GetGlobalConfig(filename='../acc_config.json'):
+def GetGlobalConfig(filename='./acc_config.json'):
 	"""!
 	TODO_DOC
 	
@@ -30,8 +30,8 @@ def GetGlobalConfig(filename='../acc_config.json'):
 	
 	import errno
 
-	if not os.exists(filename):
-		raise FileNotFoundError(errno.ENOENT, os.sterror(errno.ENOENT), filename)
+	if not os.path.isfile(filename):
+		raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), filename)
 
 	with open(filename, 'r') as f:
 		ret = json.load(f)

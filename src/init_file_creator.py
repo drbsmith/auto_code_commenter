@@ -17,7 +17,9 @@ import sys, os
 from util.log import setup_logging
 logger = setup_logging('init_file_creator.py')
 
-FILE_TEMPLATE = '''"""! @package {}
+FILE_TEMPLATE = '''"""! @package {} 
+
+# Package: {}
 
 TODO_DOC
 
@@ -88,7 +90,7 @@ def PullOutExisting(filename):
 
 	for i in range(0, len(lines)):
 		if '## Modules' in lines[i]:
-			retain = lines[1:i]
+			retain = lines[1:i]        # <--- don't want to keep the Package line either...
 
 			out = ""
 			for r in retain:
@@ -130,7 +132,7 @@ def main(path):
 
 	logger.info('creating new file at {}__init__.py'.format(path))
 
-	new_file = FILE_TEMPLATE.format(path[:-1])
+	new_file = FILE_TEMPLATE.format(path[:-1], path[:-1])
 
 	if retain:
 		new_file = new_file.replace('TODO_DOC', retain)

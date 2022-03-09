@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['test_5fclass_42',['test_class',['../classsrc_1_1test__documentation_1_1test__class.html',1,'src::test_documentation']]]
+  ['gmtformatter_62',['GMTFormatter',['../classsrc_1_1util_1_1log_1_1_g_m_t_formatter.html',1,'src::util::log']]]
 ];

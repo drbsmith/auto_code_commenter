@@ -1,5 +1,7 @@
 # TODO Notes
 
+## 2022-03-08
+* init_file_creator.py - if retaining text from previous file, drop Package: line and [TODO-DOC] lines.
 ## 2022-03-07
 
 * Tweaks to CodeLine/Block parsing. Handle decorators, incorrect indentation if there is a non-functional ';' in the line. Extra \n after codeblocks when printing (casting to str)
