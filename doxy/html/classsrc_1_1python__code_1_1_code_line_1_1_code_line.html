@@ -88,6 +88,9 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__copy__</b> (self)</t
 <tr class="memitem:a4b9dff938ad61066c7d7bc8d18e70484"><td class="memItemLeft" align="right" valign="top"><a id="a4b9dff938ad61066c7d7bc8d18e70484"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>__len__</b> (self)</td></tr>
 <tr class="separator:a4b9dff938ad61066c7d7bc8d18e70484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a470e1824220905f708897e89db137fe0"><td class="memItemLeft" align="right" valign="top"><a id="a470e1824220905f708897e89db137fe0"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>__contains__</b> (self, key)</td></tr>
+<tr class="separator:a470e1824220905f708897e89db137fe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90d7bc773356db96e75a340fd2a6771c"><td class="memItemLeft" align="right" valign="top"><a id="a90d7bc773356db96e75a340fd2a6771c"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>find</b> (self, x)</td></tr>
 <tr class="separator:a90d7bc773356db96e75a340fd2a6771c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,6 +127,9 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>isClass</b> (self)</td
 <tr class="memitem:a4e56f22971322fccd962d42ab6119423"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsrc_1_1python__code_1_1_code_line_1_1_code_line.html#a4e56f22971322fccd962d42ab6119423">getClassName</a> (self)</td></tr>
 <tr class="memdesc:a4e56f22971322fccd962d42ab6119423"><td class="mdescLeft">&#160;</td><td class="mdescRight">pull out the class name from our line  <a href="classsrc_1_1python__code_1_1_code_line_1_1_code_line.html#a4e56f22971322fccd962d42ab6119423">More...</a><br /></td></tr>
 <tr class="separator:a4e56f22971322fccd962d42ab6119423"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e70cd0cd6b5c1bb8f8dc230af742d4c"><td class="memItemLeft" align="right" valign="top"><a id="a1e70cd0cd6b5c1bb8f8dc230af742d4c"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>getArguments</b> (self)</td></tr>
+<tr class="separator:a1e70cd0cd6b5c1bb8f8dc230af742d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d4dbf3cc4213ddde6265f297c42b510"><td class="memItemLeft" align="right" valign="top"><a id="a5d4dbf3cc4213ddde6265f297c42b510"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>isDecorator</b> (self)</td></tr>
 <tr class="separator:a5d4dbf3cc4213ddde6265f297c42b510"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,6 +137,9 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>isDecorator</b> (self)
 def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsrc_1_1python__code_1_1_code_line_1_1_code_line.html#a16f9ab3754ef81f4c17ee1bd088befdf">imports</a> (self)</td></tr>
 <tr class="memdesc:a16f9ab3754ef81f4c17ee1bd088befdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get any packages imported on our line. <br /></td></tr>
 <tr class="separator:a16f9ab3754ef81f4c17ee1bd088befdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5949495d00b356730a4ef916f70236a2"><td class="memItemLeft" align="right" valign="top"><a id="a5949495d00b356730a4ef916f70236a2"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>removeLeadingWhitespace</b> (self)</td></tr>
+<tr class="separator:a5949495d00b356730a4ef916f70236a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee1a7b1d401c18fc18e590b183d87c8f"><td class="memItemLeft" align="right" valign="top"><a id="aee1a7b1d401c18fc18e590b183d87c8f"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsrc_1_1python__code_1_1_code_line_1_1_code_line.html#aee1a7b1d401c18fc18e590b183d87c8f">inComment</a> (cls, line, pos)</td></tr>
 <tr class="memdesc:aee1a7b1d401c18fc18e590b183d87c8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">test if a position in a string is within a comment (or docstring) <br /></td></tr>
@@ -138,12 +147,12 @@ def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <tr class="memitem:abfc816428e09e096750c4b8d6d7b8f9e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsrc_1_1python__code_1_1_code_line_1_1_code_line.html#abfc816428e09e096750c4b8d6d7b8f9e">inLiteral</a> (cls, line, pos)</td></tr>
 <tr class="memdesc:abfc816428e09e096750c4b8d6d7b8f9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if a specified position in a string is within a string literal.  <a href="classsrc_1_1python__code_1_1_code_line_1_1_code_line.html#abfc816428e09e096750c4b8d6d7b8f9e">More...</a><br /></td></tr>
 <tr class="separator:abfc816428e09e096750c4b8d6d7b8f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6cbce29f82e055d805fdcf171cfc07e"><td class="memItemLeft" align="right" valign="top"><a id="af6cbce29f82e055d805fdcf171cfc07e"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>removeLeadingWhitespace</b> (cls, line)</td></tr>
-<tr class="separator:af6cbce29f82e055d805fdcf171cfc07e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a243aaeec6679e6aaac2a7baa123918a1"><td class="memItemLeft" align="right" valign="top"><a id="a243aaeec6679e6aaac2a7baa123918a1"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>removeTrailingWhitespace</b> (cls, line)</td></tr>
-<tr class="separator:a243aaeec6679e6aaac2a7baa123918a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83c26843394194e7f80e01f1dce357f6"><td class="memItemLeft" align="right" valign="top"><a id="a83c26843394194e7f80e01f1dce357f6"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>RemoveLeadingWhitespace</b> (cls, line)</td></tr>
+<tr class="separator:a83c26843394194e7f80e01f1dce357f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a431dc6d334f2277375b99a0ebbcf87dd"><td class="memItemLeft" align="right" valign="top"><a id="a431dc6d334f2277375b99a0ebbcf87dd"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>RemoveTrailingWhitespace</b> (cls, line)</td></tr>
+<tr class="separator:a431dc6d334f2277375b99a0ebbcf87dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>

@@ -75,18 +75,6 @@ def CheckForHeader(code):
 	return header
 
 def RemoveHeader(code):
-	"""!
-	TODO_DOC
-	
-	@param code: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 15
-	* characters: 216
-	* returns: code
-	"""
-	
 	s, e = 0, -1
 	for x, i in zip(code, range(0,len(code))):
 		if x.find('"""!') > -1:
@@ -176,18 +164,6 @@ def RollupFunctions(code_lines):
 
 def RollupClasses(code_lines):
 	# Go through lines to find class definitions
-	"""!
-	TODO_DOC
-	
-	@param code_lines: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 15
-	* characters: 256
-	* returns: classes
-	"""
-	
 
 	classes = []
 
@@ -202,19 +178,6 @@ def RollupClasses(code_lines):
 	return classes
 
 def RollupPackages(code_lines):
-	"""!
-	TODO_DOC
-	
-	@param code_lines: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 8
-	* characters: 203
-	* imports: 	from util.util_parsing import flatten, 	packages = [item.imports() for item in code_lines]
-	* returns: packages
-	"""
-	
 	from util.util_parsing import flatten
 	packages = [item.imports() for item in code_lines]
 	packages = [p for p in packages if p]
@@ -238,20 +201,7 @@ def MakeHeader(fname):
 	return header
 
 def BuildHeader(fname, code_lines):
-	"""!
-	TODO_DOC
 	
-	@param fname: TODO_DOC
-	@param code_lines: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 36
-	* characters: 710
-	* returns: header
-	"""
-	
-
 	header = MakeHeader(fname)
 
 	text = ''
@@ -287,18 +237,6 @@ def BuildHeader(fname, code_lines):
 	return header
 
 def main():
-	"""!
-	TODO_DOC
-	
-	@param : TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 46
-	* characters: 1249
-	* imports: 	from python_code.CodeBlock import CodeBlock
-	"""
-	
 	if len(sys.argv) < 2:
 		logger.error('missing required path to file argument')
 		return

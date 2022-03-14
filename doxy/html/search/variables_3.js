@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['recursive_118',['RECURSIVE',['../directory__check__for__headers_8py.html#aab5f73618f4433e079d1de43f8aa791a',1,'src::directory_check_for_headers']]],
-  ['rename_5foriginal_119',['RENAME_ORIGINAL',['../header__generator_8py.html#a7bdbf9f810b92d8a9c9477d1781a9e6b',1,'src::header_generator']]]
+  ['logger_152',['logger',['../variable__documenter_8py.html#a9514e84e83c55acc37cc9e9e0b623dc2',1,'src::variable_documenter']]]
 ];

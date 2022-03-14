@@ -6,6 +6,7 @@
 	"TODO_TAG": {
 		"value": "TODO_DOC",
 		"description": "A string placed to indicate manual annotation is needed."
-	}
+	},
+	"FUNCTION_TEMPLATE": "\"\"\"!\nTODO_DOC\n[COMMENTS]\n\n[PARAMS]\n@return TODO_DOC\n[FUNC_PROFILE]\n\"\"\""
 
 }

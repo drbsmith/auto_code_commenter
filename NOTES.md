@@ -1,7 +1,21 @@
 # TODO Notes
 
+## 2022-03-10
+
+* be able to update headers without full erase and replace (to keep anything between the title and the Classes/Functions lists)
+* calculate stats for functions and modules: how many lines (each func), how many other calls, dependencies (functions relied on)
+* tease out inline comments to create description?
+* tease out TODO comments and put in header of the file
+* build library of patterns to describe what each line (or block) does.
+* handle ## vs """ comment blocks?
+* document global variables!
+* scrape for decorators and document in header? or in function doc?
+* create a subdirectory for each module, keep what each module calls to be able to describe who calls each function
+* Classes: auto doc 'self' variables
+
 ## 2022-03-08
 * init_file_creator.py - if retaining text from previous file, drop Package: line and [TODO-DOC] lines.
+
 ## 2022-03-07
 
 * Tweaks to CodeLine/Block parsing. Handle decorators, incorrect indentation if there is a non-functional ';' in the line. Extra \n after codeblocks when printing (casting to str)

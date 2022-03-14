@@ -17,6 +17,7 @@ Unit/regression tests to assert functionality of parsing classes.
 import os
 import sys
 
+## p : TODO_DOC
 p = os.path.dirname(os.path.abspath('./src/test'))
 sys.path.append(p)
 
@@ -103,3 +104,4 @@ def main():
 
 if __name__ == '__main__':
 	main()
+

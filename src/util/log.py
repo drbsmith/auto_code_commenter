@@ -50,7 +50,7 @@ def setup_logging(filename: str = 'auto_code_commenter'):
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'level': 'ERROR',
                 'formatter': 'detail',
-                'filename': '../../logs/{}.log'.format(filename),
+                'filename': './logs/{}.log'.format(filename),
                 'interval': 1,
                 'when': 'midnight',
                 'backupCount': 10,
@@ -61,7 +61,7 @@ def setup_logging(filename: str = 'auto_code_commenter'):
                 'class': 'logging.handlers.RotatingFileHandler',
                 'level': lowest_level,
                 'formatter': 'detail',
-                'filename': '../../logs/{}-{}.log'.format(filename, lowest_level),
+                'filename': './logs/{}-{}.log'.format(filename, lowest_level),
                 'maxBytes': 2097152,
                 'backupCount': 10
             }

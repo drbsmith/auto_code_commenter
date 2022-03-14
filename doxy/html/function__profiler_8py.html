@@ -74,19 +74,89 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a68a2c7921ee97d9fa15f5e3453a4e15f"><td class="memItemLeft" align="right" valign="top"><a id="a68a2c7921ee97d9fa15f5e3453a4e15f"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>src.function_profiler.ProfileFunction</b> (code_lines)</td></tr>
+<tr class="memitem:a68a2c7921ee97d9fa15f5e3453a4e15f"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="function__profiler_8py.html#a68a2c7921ee97d9fa15f5e3453a4e15f">src.function_profiler.ProfileFunction</a> (code_lines)</td></tr>
+<tr class="memdesc:a68a2c7921ee97d9fa15f5e3453a4e15f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a textual profile of the function (total lines, characters, what it imports, returns)  <a href="function__profiler_8py.html#a68a2c7921ee97d9fa15f5e3453a4e15f">More...</a><br /></td></tr>
 <tr class="separator:a68a2c7921ee97d9fa15f5e3453a4e15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c4cdddef430fc09efd0510d7355492a"><td class="memItemLeft" align="right" valign="top"><a id="a0c4cdddef430fc09efd0510d7355492a"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>src.function_profiler.ProfileDictToLines</b> (profile_dict)</td></tr>
+<tr class="memitem:a0c4cdddef430fc09efd0510d7355492a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="function__profiler_8py.html#a0c4cdddef430fc09efd0510d7355492a">src.function_profiler.ProfileDictToLines</a> (profile_dict)</td></tr>
+<tr class="memdesc:a0c4cdddef430fc09efd0510d7355492a"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO_DOC.  <a href="function__profiler_8py.html#a0c4cdddef430fc09efd0510d7355492a">More...</a><br /></td></tr>
 <tr class="separator:a0c4cdddef430fc09efd0510d7355492a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1><a class="anchor" id="autotoc_md7"></a>
-Code Block</h1>
-<p>Represents one functional block of code (in python usually indicated with a leading line terminated with a colon ':', and all subsequent lines indented one level).</p>
-<p>Q: have one list of all lines/blocks, or split into the 'definition' line and then a list of all sub-items? (the indented lines/blocks) </p>
-</div></div><!-- contents -->
+<div class="textblock"><h1><a class="anchor" id="autotoc_md8"></a>
+Function Profiler</h1>
+<p>Build a textual profile for a function. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a0c4cdddef430fc09efd0510d7355492a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c4cdddef430fc09efd0510d7355492a">&#9670;&nbsp;</a></span>ProfileDictToLines()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def src.function_profiler.ProfileDictToLines </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>profile_dict</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>TODO_DOC. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">profile_dict</td><td>TODO_DOC </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TODO_DOC</dd></dl>
+<h2><a class="anchor" id="autotoc_md11"></a>
+Profile</h2>
+<ul>
+<li>line count: 15</li>
+<li>characters: 428</li>
+<li>imports: from python_code.CodeLine import CodeLine</li>
+<li>returns: ret </li>
+</ul>
+
+</div>
+</div>
+<a id="a68a2c7921ee97d9fa15f5e3453a4e15f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68a2c7921ee97d9fa15f5e3453a4e15f">&#9670;&nbsp;</a></span>ProfileFunction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def src.function_profiler.ProfileFunction </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>code_lines</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Build a textual profile of the function (total lines, characters, what it imports, returns) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">code_lines</td><td>CodeLine list that contains the function </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(dict) the profile (see below for an example, March 2022)</dd></dl>
+<h2><a class="anchor" id="autotoc_md9"></a>
+Profile</h2>
+<ul>
+<li>line count: 39</li>
+<li>characters: 1121</li>
+<li>imports: # does it import anything?, imports = code_lines.getImports(), # if 'import' in line and not IsComment(line):, # imports.append(StripLeadingWhitespace(line))</li>
+<li>returns: anything?, = code_lines.getReturns(), in line and not IsComment(line):, .append(StripLeadingWhitespace(line.replace('return', ''))), out_dict </li>
+</ul>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

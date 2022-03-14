@@ -33,6 +33,8 @@ class CodeLine():
 		return CodeLine(self.line)
 	def __len__(self):
 		return len(self.line)
+	def __contains__(self, key):
+		return key in self.line
 	def find(self, x):
 		return self.line.find(x)
 		
@@ -46,7 +48,7 @@ class CodeLine():
 			if self.inDocString:
 				return CodeLine(self.line)
 			else:
-				line0 = CodeLine.removeLeadingWhitespace(self.line)
+				line0 = CodeLine.RemoveLeadingWhitespace(self.line)
 				return CodeLine(tab + line0)
 				
 	def getIndentLevel(self):
@@ -66,7 +68,7 @@ class CodeLine():
 				return lvl
 				
 	def isComment(self):
-		line0 = CodeLine.removeLeadingWhitespace(self.line)
+		line0 = CodeLine.RemoveLeadingWhitespace(self.line)
 		
 		if line0 == '':
 			return False
@@ -109,7 +111,7 @@ class CodeLine():
 			if self.line == '':
 				return 0
 			else:
-				return len(CodeLine.removeTrailingWhitespace(self.line))
+				return len(CodeLine.RemoveTrailingWhitespace(self.line))
 		else:
 			for i in range(len(self.line)-1, 0, -1):
 				if not CodeLine.inComment(self.line, i):
@@ -117,7 +119,7 @@ class CodeLine():
 					if len(line0) == 0:
 						return 0
 					else:
-						return len(CodeLine.removeTrailingWhitespace(line0))
+						return len(CodeLine.RemoveTrailingWhitespace(line0))
 
 	def isFunction(self):
 		"""! Test if we are a function definition line """
@@ -156,8 +158,20 @@ class CodeLine():
 
 		return line[s:e].replace(' ', '')
 
+	def getArguments(self):
+		if self.isFunction() or self.isClass:
+			# get everything inside of ( )
+			s = self.line.find('(') + 1
+			e = self.line.find(')')
+
+			var_str = self.line[s:e]
+			var = var_str.replace(' ','').split(',')
+
+			return var
+		else: return None
+
 	def isDecorator(self):
-		line0 = CodeLine.removeLeadingWhitespace(self.line)
+		line0 = CodeLine.RemoveLeadingWhitespace(self.line)
 		if len(line0) > 0 and line0[0] == '@':
 			return True
 		else:
@@ -178,6 +192,9 @@ class CodeLine():
 					y = self.getLastFunctionalPos() #  if there is a trailing comment on the line we'll ignore it
 					return self.line[x+7:y]
 		return None
+
+	def removeLeadingWhitespace(self):
+		self.line = CodeLine.RemoveLeadingWhitespace(self.line)
 						
 	@classmethod
 	def inComment(cls, line, pos):
@@ -224,7 +241,7 @@ class CodeLine():
 		return False
 		
 	@classmethod
-	def removeLeadingWhitespace(cls, line):
+	def RemoveLeadingWhitespace(cls, line):
 		if type(line) is CodeLine:
 			line = line.line
 		while len(line) > 0 and line[0] in WHITE_SPACE:
@@ -233,7 +250,7 @@ class CodeLine():
 		return line
 		
 	@classmethod
-	def removeTrailingWhitespace(cls, line):
+	def RemoveTrailingWhitespace(cls, line):
 		if type(line) is CodeLine:
 			line = line.line
 		while len(line) > 0 and line[-1] in WHITE_SPACE:

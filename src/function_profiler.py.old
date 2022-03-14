@@ -1,8 +1,10 @@
 """! @file
 
-# Function Profiler
+# Code Block
 
-Build a textual profile for a function.
+Represents one functional block of code (in python usually indicated with a leading line terminated with a colon ':', and all subsequent lines indented one level).
+
+Q: have one list of all lines/blocks, or split into the 'definition' line and then a list of all sub-items? (the indented lines/blocks)
 
 @package python"""
 
@@ -10,20 +12,9 @@ Build a textual profile for a function.
 from python_code.CodeLine import CodeLine
 
 def ProfileFunction(code_lines):
-	"""!
-	Build a textual profile of the function (total lines, characters, what it imports, returns)
-	
-	@param code_lines: CodeLine list that contains the function
-	@return (dict) the profile (see below for an example, March 2022)
-	
-	## Profile
-	* line count: 39
-	* characters: 1121
-	* returns: anything?, = code_lines.getReturns(), in line and not IsComment(line):, .append(StripLeadingWhitespace(line.replace('return', ''))), out_dict
-	"""
 	if len(code_lines) < 1:
 		return None
-
+	
 	# put together a little dict/statement describing the supplied code.
 	out_dict = {}
 
@@ -60,17 +51,6 @@ def ProfileFunction(code_lines):
 	return out_dict
 
 def _list2str(x):
-	"""!
-	TODO_DOC
-	
-	@param x: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 8
-	* characters: 79
-	* returns: out[:-2]
-	"""
 	out = ""
 
 	for y in x:
@@ -79,20 +59,8 @@ def _list2str(x):
 	return out[:-2]
 
 def ProfileDictToLines(profile_dict):
-	"""!
-	TODO_DOC
-	
-	@param profile_dict: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 15
-	* characters: 428
-	* imports: from python_code.CodeLine import CodeLine
-	* returns: ret
-	"""
 	if profile_dict is None:
-		return None
+		return None	
 
 	from python_code.CodeLine import CodeLine
 

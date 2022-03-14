@@ -11,10 +11,8 @@ Q: have one list of all lines/blocks, or split into the 'definition' line and th
 import logging
 from python_code.CodeLine import CodeLine
 
-## DEFAULT_INDENT : the indentation literal to use in indenting cobe blocks
 DEFAULT_INDENT = '\t'
 
-## DEBUG : If True will cause extra prints and text added to string conversions
 DEBUG = False
 
 class CodeBlock():
@@ -32,10 +30,10 @@ class CodeBlock():
 		for b in self.block:
 			if type(b) is CodeBlock:
 				if DEBUG:
-					ret += '#### block vvvv\n'
+					ret += '---- block vvvv\n'
 				ret += str(b)
 				if DEBUG:
-					ret += '#### block ^^^^\n'
+					ret += '---- block ^^^^\n'
 			else:
 				ret += '{}\n'.format(str(b)) # the sub block injects its own carriage return and we end up with 2. Maybe check for ending \n in str(b)?
 		return ret
@@ -95,7 +93,7 @@ class CodeBlock():
 
 		@param self: instance to apply formatting to.
 		@param tab=DEFAULT_INDENT: the indentation character to use (usually tab or spaces)
-		@return (CodeBlock) the formatted copy of the block
+		@return (CodeBlock) the formatted copy of the block 
 		"""
 		if not tab is None:
 			# add tab to each item
@@ -170,7 +168,7 @@ class CodeBlock():
 		"""! do we have any import lines? If yes, return the packages imported """
 		ret = []
 		for item in self.block:
-			if item.find('import ') > -1:
+			if item.find('import') > -1:
 				ret.append(item.line)
 		if len(ret) > 0:
 			return ret
@@ -232,7 +230,7 @@ class CodeBlock():
 		ret = flatten(ret)
 		return ret
 
-	@classmethod
+	@classmethod 
 	def __split_module(cls, lines):
 		items = []
 		indents = [l.getIndentLevel() for l in lines]
@@ -253,7 +251,7 @@ class CodeBlock():
 					i += skip
 				else: # indents[i] is None or indents[i] == 0:
 					items.append(lines[i])
-					i += 1
+					i += 1				
 
 			return CodeBlock(items), i
 		except:
@@ -263,13 +261,13 @@ class CodeBlock():
 
 	@classmethod
 	def __split_lines(cls, lines):
-		"""!
+		"""! 
 		In building this, a couple special cases have emerged:
 		* When its the root block, with lots of left aligned code/imports/comments
 		* when it's a class/function def with a line or two (decorators) at one indentation and all the rest in one more
 
 		@param lines: list of strings to parse
-		@return (CodeBlock, int) The root CodeBlock and a count of how many lines were processed.
+		@return (CodeBlock, int) The root CodeBlock and a count of how many lines were processed. 
 		"""
 		indents = [l.getIndentLevel() for l in lines]
 
@@ -279,8 +277,7 @@ class CodeBlock():
 		if ind0 is None: # find first not None indent
 			for ind in indents:
 				if not ind is None:
-					ind0 = ind
-					break
+					ind0 = ind; break
 
 		# get the block def lines and find the block content indentation
 		ind1 = None
@@ -364,4 +361,3 @@ class CodeBlock():
 		# print(cb)
 
 		return cb
-

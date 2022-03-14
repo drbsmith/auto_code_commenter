@@ -15,29 +15,32 @@ Scans a .py file, finds any functions missing documentation blocks, parses varia
 
 @package src"""
 
-
+## build a profile of each function and include in the documentation
 INCLUDE_FUNCTION_PROFILE = True
 
 ## pull inline comments up to function docstring
-INCLUDE_INLINE_COMMENTS = True
+INCLUDE_INLINE_COMMENTS = False
 
 import sys, os
 
 from util.log import setup_logging
 logger = setup_logging()
+from util.config import GetGlobalConfig
 
-FUNCTION_TEMPLATE = '''"""!
-TODO_DOC
-[COMMENTS]
+config = GetGlobalConfig()
+FUNCTION_TEMPLATE = config['FUNCTION_TEMPLATE']
+# '''"""!
+# TODO_DOC
+# [COMMENTS]
 
-[PARAMS]
-@return TODO_DOC
-[FUNC_PROFILE]
-"""
-'''
+# [PARAMS]
+# @return TODO_DOC
+# [FUNC_PROFILE]
+# """
+# '''
 
-from py_parsers import SetIndent, GetIndent
-from util.util_parsing import StripLeadingWhitespace
+from python_code.CodeLine import CodeLine
+from python_code.CodeBlock import CodeBlock
 
 def FindFunctions(code_lines):
 	"""!
@@ -53,7 +56,7 @@ def FindFunctions(code_lines):
 	for line, i in zip(code_lines, range(0,len(code_lines))):
 		if line.isFunction():
 			flines.append(i)
-			
+
 		# # strip leading white space
 		# line = StripLeadingWhitespace(line)
 
@@ -81,43 +84,6 @@ def CheckForDocumentation(func_lines):
 	else:
 		return False
 
-def RemoveDocumentation(func_lines):
-	code = '\n'.join(func_lines)
-
-	s = code.find('"""!')
-	e = code[s+4:].find('"""') + (s+4) + 3
-
-	ret = code[:s] + code[e:]
-
-	ret = code.split('\n')
-
-	return ret
-
-def ExtractVariables(func_lines):
-	"""!
-	TODO: what does this function do?
-	@param func_lines: TODO: what does func_lines variable do?
-
-	@return TODO: what does it return?
-	"""
-
-	# func_lines: the definition lines for the whole function
-	# TODO: test that this catches class functions too
-	if func_lines[0][:4] != 'def ':
-		logger.error('first line must be the function definition. Instead it is: {}'.format(func_lines[0]))
-		return
-
-	# get everything inside of ( )
-	s = func_lines[0].find('(') + 1
-	e = func_lines[0].find(')')
-
-	var_str = func_lines[0][s:e]
-	var = var_str.replace(' ','').split(',')
-
-	logger.debug('found {} variables for function: "{}"'.format(len(var), func_lines[0]))
-
-	return var
-
 def ExtractComments(func_lines):
 	ret = []
 
@@ -144,13 +110,13 @@ def MakeParamBlock(params):
 	out = []
 
 	for param in params:
-		s = "@param {}: TODO_DOC".format(param, param)
+		s = CodeLine("@param {}: TODO_DOC".format(param, param))
 
 		out.append(s)
 
 	return out
 
-def BuildFunctionBlock(indent, params=None, profile=None, comments=None):
+def BuildFunctionBlock(params=None, profile=None, comments=None):
 	"""!
 	TODO: what does this function do?
 	@param indent: TODO: what does indent variable do?
@@ -159,11 +125,12 @@ def BuildFunctionBlock(indent, params=None, profile=None, comments=None):
 	@return (list) All the lines that make up the documentation block for the function
 	"""
 
-	lines = SetIndent(FUNCTION_TEMPLATE.split('\n'), indent)
+	# lines = SetIndent(FUNCTION_TEMPLATE.split('\n'), indent)
+	lines = FUNCTION_TEMPLATE.split('\n')
+	lines = [CodeLine(l) for l in lines]
 
 	if params is None:
-		lines = [l for l in lines if not '[PARAMS]' in l]
-		#block = block.replace('[PARAMS]', '') # remove the placeholder
+		lines = [l for l in lines if not '[PARAMS]' in l]  # remove the placeholder
 	else:
 		# inject parameters
 		for i in range(0, len(lines)):
@@ -190,57 +157,52 @@ def BuildFunctionBlock(indent, params=None, profile=None, comments=None):
 
 def main(filename, FORCE=False):
 
-	from py_parsers import ParsePyScript, GetIndent
-	code_lines, code_raw = ParsePyScript(filename)
+	# from py_parsers import ParsePyScript, GetIndent
+	# code_lines, code_raw = ParsePyScript(filename)
 
-	logger.info('read {} bytes over {} lines of code'.format(len(code_raw),len(code_lines)))
+	with open(filename, 'r') as f:
+		raw = f.read()
+
+	from python_code.CodeBlock import CodeBlock
+	code_lines = CodeBlock.ParsePython(raw)
+
+	logger.info('read {} bytes over {} blocks of code'.format(len(raw),len(code_lines)))
 
 	# get all lines that contain a function definition
-	func_lines = FindFunctions(code_lines)
-	func_lines.append(len(code_lines)) # stick EoF on the list
+	# func_lines = FindFunctions(code_lines)
+	# func_lines.append(len(code_lines)) # stick EoF on the list
+	write_it = False
 
-	injects = {}
-	# check each function for an existing comment block
-	for i, j in zip(func_lines[:-1], func_lines[1:]):
-		flines = code_lines[i:j]
-		has_doc = CheckForDocumentation(flines)
+	# check for all global functions:
+	for cb in code_lines:
+		if cb.isFunction():
+			if cb.hasDocumentation():
+				if not FORCE:
+					# say something?
+					continue
+				else:
+					cb.removeDocumentation()
 
-		if has_doc and FORCE:
-			flines = RemoveDocumentation(flines)
-			has_doc = False
-
-		if not has_doc:
-			params = ExtractVariables(flines)
+			params = cb.getArguments()
 			text = MakeParamBlock(params)
-			ind = GetIndent(flines[1:])
-			text = SetIndent(text, ind)
 
 			if INCLUDE_FUNCTION_PROFILE:
 				from function_profiler import ProfileFunction, ProfileDictToLines
-				profile = ProfileDictToLines(ProfileFunction(flines))
-				profile = SetIndent(profile, ind)
+				profile = ProfileDictToLines(ProfileFunction(cb))
+			else: profile = None
 
 			if INCLUDE_INLINE_COMMENTS:
-				comm = ExtractComments(flines)
-				comm = SetIndent(comm, ind)
-			else:
-				comm = None
+				comm = cb.getComments() # ExtractComments(cb)
+			else: comm = None
 
-			docs = BuildFunctionBlock(ind, params=text, profile=profile, comments=comm)
-
-			# Lastly, inject our templated doc block!
-			injects[i] = docs
-			# this is tricky in the raw data... we need to find the def Name( and then the closing ):
-
-	# if we compiled any injects, stick them in from the last backwards to the first
-	write_it = False
-	if len(injects) > 0:
-		idx = list(injects.keys())
-		idx.sort(reverse=True)
-
-		for i in idx:
-			code_lines[i+1:i+1] = injects[i]
+			docs = BuildFunctionBlock(params=text, profile=profile, comments=comm)
+			ind = cb.indent(None)
+			docs = [c.indent(ind) for c in docs]
+			
+			cb.addDocumentation(docs)
 			write_it = True
+
+	code_lines.indent()
 
 	# no changes? don't write anything
 	if write_it:
@@ -249,9 +211,10 @@ def main(filename, FORCE=False):
 		logger.info('moved original file to {}'.format(filename + '.old'))
 
 		with open(filename, 'w') as f:
-			for line in code_lines:
-				f.write( line )
-				f.write( '\n' )
+			f.write( str(code_lines) )
+			# for line in code_lines:
+			# 	f.write( str(line) )
+			# 	f.write( '\n' )
 		logger.info('added new function documentation to {}'.format(filename))
 	else:
 		logger.info('no changes were made.')
