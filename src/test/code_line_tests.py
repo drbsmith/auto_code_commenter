@@ -85,18 +85,19 @@ def testCodeBlock():
 
 	assert(str(loop[2]) == '\t\t# do almost nothing')
 
+	fnames = ['parse_this.py', 'test_documentation.py']
+	for file in fnames:
+		# parse python
+		with open('./src/test/{}'.format(file), 'r') as f: #      python_code/CodeLine
+			code = f.read()
+		from python_code.CodeBlock import CodeBlock
+
+		cb = CodeBlock.ParsePython(code)
+		print(cb)
+
 	print('CodeBlock class passed all tests')
 
 def main():
-	with open('./src/test/parse_this.py', 'r') as f: #      python_code/CodeLine
-		code = f.read()
-	from python_code.CodeBlock import CodeBlock
-
-	cb = CodeBlock.ParsePython(code)
-	print(cb)
-
-	with open('./src/python_code/CodeLine_redo.py', 'w') as f:
-		f.write(str(cb))
 
 	testCodeLine()
 

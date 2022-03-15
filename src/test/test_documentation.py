@@ -7,10 +7,14 @@ class test_class():
 
 		print('test_class initialized.')
 
+	def function2(self, x):
+		# no tricks here, just a function.
+		x = 22
+		return 42
+
 	def coolFunction(self, \
-		# needless commentary in the middle of a function definition!
 		d \
-		):
+		): # putting a comment inbetween a split line function def like this will break the parsing. Maybe we could write special handlers for it, or we can just say: why? Put your comments in the documentation block!
 		print('returning what I got, a {}'.format(d))
 		return d
 

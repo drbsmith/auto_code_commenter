@@ -15,7 +15,7 @@ from python_code.CodeLine import CodeLine
 DEFAULT_INDENT = '\t'
 
 ## DEBUG : If True will cause extra prints and text added to string conversions
-DEBUG = False
+DEBUG = True
 
 class CodeBlock():
 	def __init__(self, items):
@@ -291,29 +291,30 @@ class CodeBlock():
 				ind1 = ind
 				break
 
-		# ind0 is the start indentation, ind1 is the content indent
-		while i < len(lines):
-			cl = CodeLine(lines[i])
+		# ind0 is the start indentation, ind1 is the content indent. ind1 is None when there are no indented lines.
+		if not ind1 is None:
+			while i < len(lines):
+				cl = CodeLine(lines[i])
 
-			if not indents[i] is None and indents[i] < ind1:
-				return CodeBlock(items), i 	# block ended, return
-			else:
-				lfchar = cl.line[:cl.getLastFunctionalPos()]
-
-				if len(lfchar) > 0 and lfchar[-1] == ':':
-					# check if it's a new function/block
-					idx = i # check for preceding decorators
-					while indents[idx] == indents[idx-1] and CodeLine.RemoveLeadingWhitespace(lines[idx-1])[0] == '@':
-						idx -= 1
-						i -= 1
-						items.pop() # remove the last line because we're passing it to the next block
-
-					item, skip = CodeBlock.__split_lines(lines[idx:])
-					items.append(item)
-					i += skip
+				if not indents[i] is None and indents[i] < ind1:
+					return CodeBlock(items), i 	# block ended, return
 				else:
-					items.append(lines[i])
-					i += 1
+					lfchar = cl.line[:cl.getLastFunctionalPos()]
+
+					if len(lfchar) > 0 and lfchar[-1] == ':':
+						# check if it's a new function/block
+						idx = i # check for preceding decorators
+						while indents[idx] == indents[idx-1] and CodeLine.RemoveLeadingWhitespace(lines[idx-1])[0] == '@':
+							idx -= 1
+							i -= 1
+							items.pop() # remove the last line because we're passing it to the next block
+
+						item, skip = CodeBlock.__split_lines(lines[idx:])
+						items.append(item)
+						i += skip
+					else:
+						items.append(lines[i])
+						i += 1
 
 		return CodeBlock(items), i
 

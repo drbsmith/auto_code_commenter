@@ -7,6 +7,6 @@
 		"value": "TODO_DOC",
 		"description": "A string placed to indicate manual annotation is needed."
 	},
-	"FUNCTION_TEMPLATE": "\"\"\"!\nTODO_DOC\n[COMMENTS]\n\n[PARAMS]\n@return TODO_DOC\n[FUNC_PROFILE]\n\"\"\""
-
+	"FUNCTION_TEMPLATE": "\"\"\"!\nTODO_DOC\n[COMMENTS]\n\n[PARAMS]\n@return TODO_DOC\n[FUNC_PROFILE]\n\"\"\"\n",
+	"HEADER_TEMPLATE": "\"\"\"! @file\n\n# {}\n\nTODO_DOC\n\n[PACKAGES]\n[CLASSES]\n[FUNCTIONS]\n[POST]\n@package {} \"\"\"\n"
 }

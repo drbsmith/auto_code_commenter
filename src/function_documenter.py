@@ -25,8 +25,8 @@ import sys, os
 
 from util.log import setup_logging
 logger = setup_logging()
-from util.config import GetGlobalConfig
 
+from util.config import GetGlobalConfig
 config = GetGlobalConfig()
 FUNCTION_TEMPLATE = config['FUNCTION_TEMPLATE']
 # '''"""!

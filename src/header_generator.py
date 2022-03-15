@@ -28,19 +28,24 @@ INCLUDE_PACKAGES = True
 
 ## Template used to generate the header block.
 # TODO: move to a file that can be specified without modifying this code.
-HEADER_TEMPLATE = '''"""! @file
 
-# {}
+from util.config import GetGlobalConfig
+config = GetGlobalConfig()
+HEADER_TEMPLATE = config['HEADER_TEMPLATE']
 
-TODO_DOC
+# HEADER_TEMPLATE = '''"""! @file
 
-[PACKAGES]
-[CLASSES]
-[FUNCTIONS]
-[POST]
-@package {}"""
+# # {}
 
-'''
+# TODO_DOC
+
+# [PACKAGES]
+# [CLASSES]
+# [FUNCTIONS]
+# [POST]
+# @package {}"""
+
+# '''
 
 ## Rename original: keeps the original source file with a new suffix
 RENAME_ORIGINAL = True
