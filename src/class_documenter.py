@@ -48,8 +48,7 @@ def doClassInit(codeblock):
 				ind = codeblock.block[i].indent()
 				codeblock.block[i:i] = [CodeLine("## TODO_DOC: what is {} class member variable?".format(member)).indent(ind)]
 
-	codeblock.indent()
-	print(codeblock)
+	# codeblock.indent()
 
 def main(filename, FORCE):
 
@@ -75,7 +74,8 @@ def main(filename, FORCE):
 						method.removeDocumentation()
 					else: continue
 				# document each function
-				DocumentFunction(method)
+				DocumentFunction(method, ignore_args=['self'])
+				write_it = True
 
 			if cb.hasDocumentation():
 				if FORCE:
@@ -90,10 +90,8 @@ def main(filename, FORCE):
 			cb.addDocumentation(docs)
 			write_it = True
 
-	code_lines = code_lines.indent()
-	write_it = False
-
 	if write_it:
+		code_lines.indent() # makes changes in place
 		# move original
 		os.rename(filename, filename + '.old')
 		logger.info('moved original file to {}'.format(filename + '.old'))

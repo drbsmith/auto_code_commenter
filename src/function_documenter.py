@@ -110,7 +110,7 @@ def MakeParamBlock(params):
 	out = []
 
 	for param in params:
-		s = CodeLine("@param {}: TODO_DOC".format(param, param))
+		s = CodeLine(config['PARAM_TAG']['value'].format(param) + " TODO_DOC")
 
 		out.append(s)
 
@@ -155,9 +155,10 @@ def BuildFunctionBlock(params=None, profile=None, comments=None):
 
 	return(lines)
 
-def DocumentFunction(codeblock):
+def DocumentFunction(codeblock, INCLUDE_FUNCTION_PROFILE=INCLUDE_FUNCTION_PROFILE, INCLUDE_INLINE_COMMENTS=INCLUDE_INLINE_COMMENTS, ignore_args=[]):
 
 	params = codeblock.getArguments()
+	params = [p for p in params if not p in ignore_args]
 	text = MakeParamBlock(params)
 
 	if INCLUDE_FUNCTION_PROFILE:

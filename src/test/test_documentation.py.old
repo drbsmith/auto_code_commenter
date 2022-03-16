@@ -1,5 +1,5 @@
 
-
+@parent_class
 class test_class():
 	def __init__(self, a, b, c):
 		self.a = b; self.b = c

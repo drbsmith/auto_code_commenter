@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['setindent_146',['SetIndent',['../py__parsers_8py.html#acba6709efb274b07d24a157e161d874a',1,'src::py_parsers']]],
-  ['stripconsecutivelineendings_147',['StripConsecutiveLineEndings',['../util__parsing_8py.html#a2d0495f50a0f7ef1c811044e80ae85f7',1,'src::util::util_parsing']]],
-  ['stripleadingwhitespace_148',['StripLeadingWhitespace',['../util__parsing_8py.html#a0aedbea6646f63386b699a79aa6e8afe',1,'src::util::util_parsing']]],
-  ['striptrailingwhitespace_149',['StripTrailingWhitespace',['../util__parsing_8py.html#a6502776df38161e004a93c54a4f7c3f6',1,'src::util::util_parsing']]]
+  ['removedocumentation_170',['removeDocumentation',['../classsrc_1_1python__code_1_1_code_block_1_1_code_block.html#ac8db619b0da8a7e22fba4ea9167e65c2',1,'src::python_code::CodeBlock::CodeBlock']]],
+  ['removeheader_171',['RemoveHeader',['../header__generator_8py.html#a5c3b9d4b3fc963f504fd8a8335809aae',1,'src::header_generator']]],
+  ['replacetodoswithconfig_172',['ReplaceTodosWithConfig',['../util__parsing_8py.html#ae75c9c8543dce82f680a6362bbeed478',1,'src::util::util_parsing']]],
+  ['returns_173',['returns',['../classsrc_1_1python__code_1_1_code_block_1_1_code_block.html#a2585a1cf2411ce861ba4bddb767a9282',1,'src::python_code::CodeBlock::CodeBlock']]],
+  ['rollupclasses_174',['RollupClasses',['../header__generator_8py.html#a9be9faa733984b99869bd51f74e1f277',1,'src::header_generator']]],
+  ['rollupfunctions_175',['RollupFunctions',['../header__generator_8py.html#a4ff4cc9ba314e8654f49dfdefac03aae',1,'src::header_generator']]]
 ];

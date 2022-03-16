@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['p_159',['p',['../code__line__tests_8py.html#a178670287f29fefd44307f461422fe74',1,'src::test::code_line_tests']]]
+  ['logger_189',['logger',['../variable__documenter_8py.html#a9514e84e83c55acc37cc9e9e0b623dc2',1,'src::variable_documenter']]]
 ];

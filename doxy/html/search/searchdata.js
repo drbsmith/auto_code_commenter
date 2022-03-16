@@ -3,9 +3,9 @@ var indexSectionsWithContent =
   0: "_abcdfghilmprstuv",
   1: "cgmt",
   2: "s",
-  3: "cdfhilptuv",
-  4: "_abcfghilmprs",
-  5: "bdilpr"
+  3: "cdfhilmptuv",
+  4: "_abcdfghilmprs",
+  5: "bdhilprt"
 };
 
 var indexSectionNames =

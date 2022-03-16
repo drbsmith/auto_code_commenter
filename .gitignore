@@ -6,6 +6,7 @@ __pycache__/
 .DS_STORE
 .zip
 logs/
+.py.old
 
 # C extensions
 *.so

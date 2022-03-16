@@ -18,6 +18,8 @@ Checks for the presence of a header block (this comment block), and either fills
 	* BuildHeader
 @package src"""
 
+from python_code.CodeBlock import CodeBlock
+
 ## If True inject a rollup of Class definitions in the header block
 INCLUDE_CLASSES = True
 
@@ -26,11 +28,11 @@ INCLUDE_FUNCTIONS = True
 
 INCLUDE_PACKAGES = True
 
-## Template used to generate the header block.
-# TODO: move to a file that can be specified without modifying this code.
+INCLUDE_PROFILE = True
 
 from util.config import GetGlobalConfig
 config = GetGlobalConfig()
+## Template used to generate the header block.
 HEADER_TEMPLATE = config['HEADER_TEMPLATE']
 
 # HEADER_TEMPLATE = '''"""! @file
@@ -42,6 +44,7 @@ HEADER_TEMPLATE = config['HEADER_TEMPLATE']
 # [PACKAGES]
 # [CLASSES]
 # [FUNCTIONS]
+# [PROFILE]
 # [POST]
 # @package {}"""
 
@@ -81,15 +84,10 @@ def CheckForHeader(code):
 
 def RemoveHeader(code):
 	"""!
-	TODO_DOC
+	If a module already has a docstring header we will delete it.
 	
-	@param code: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 15
-	* characters: 216
-	* returns: code
+	@param code: the code lines to check (list of CodeLine)
+	@return the list with the header removed
 	"""
 	
 	s, e = 0, -1
@@ -193,7 +191,6 @@ def RollupClasses(code_lines):
 	* returns: classes
 	"""
 	
-
 	classes = []
 
 	for item in code_lines:
@@ -207,25 +204,13 @@ def RollupClasses(code_lines):
 	return classes
 
 def RollupPackages(code_lines):
-	"""!
-	TODO_DOC
-	
-	@param code_lines: TODO_DOC
-	@return TODO_DOC
-	
-	## Profile
-	* line count: 8
-	* characters: 203
-	* imports: 	from util.util_parsing import flatten, 	packages = [item.imports() for item in code_lines]
-	* returns: packages
-	"""
 	
 	from util.util_parsing import flatten
 	packages = [item.imports() for item in code_lines]
 	packages = [p for p in packages if p]
 	packages = flatten(packages)
 
-	return packages
+	return list(set(packages))
 
 def MakeHeader(fname):
 	"""! Add the header block
@@ -256,28 +241,7 @@ def BuildHeader(fname, code_lines):
 	* returns: header
 	"""
 	
-
 	header = MakeHeader(fname)
-
-	text = ''
-	if INCLUDE_CLASSES:
-		classes = RollupClasses(code_lines)
-
-		if len(classes) > 0:
-			text = "## Classes\n"
-			for f in classes:
-				text += '\t* {}\n'.format(f)
-	header = header.replace('[CLASSES]', text)
-
-	text = ''
-	if INCLUDE_FUNCTIONS:
-		funcs = RollupFunctions(code_lines)
-
-		if len(funcs) > 0:
-			text = "## Functions\n"
-			for f in funcs:
-				text += '\t* {}\n'.format(f)
-	header = header.replace('[FUNCTIONS]', text)
 
 	text = ''
 	if INCLUDE_PACKAGES:
@@ -287,7 +251,38 @@ def BuildHeader(fname, code_lines):
 			text = "## Dependencies\n"
 			for i in imports:
 				text += '\t* {}\n'.format(i)
-	header = header.replace('[PACKAGES]', text)
+			text += '\n'
+	header = header.replace('[PACKAGES]\n', text)
+
+	text = ''
+	if INCLUDE_CLASSES:
+		classes = RollupClasses(code_lines)
+
+		if len(classes) > 0:
+			text = "## Classes\n"
+			for f in classes:
+				text += '\t* {}\n'.format(f)
+			text += '\n'
+	header = header.replace('[CLASSES]\n', text)
+
+	text = ''
+	if INCLUDE_FUNCTIONS:
+		funcs = RollupFunctions(code_lines)
+
+		if len(funcs) > 0:
+			text = "## Functions\n"
+			for f in funcs:
+				text += '\t* {}\n'.format(f)
+			text += '\n'
+	header = header.replace('[FUNCTIONS]\n', text)
+
+	text = ''
+	if INCLUDE_PROFILE:
+		from module_profiler import ProfileModule, ProfileToLines
+		prof = ProfileModule(code_lines)
+		text = str(CodeBlock(ProfileToLines(prof)))
+		text += '\n'
+	header = header.replace('[PROFILE]\n', text)
 
 	return header
 
