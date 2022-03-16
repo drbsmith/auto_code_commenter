@@ -50,8 +50,12 @@ class CodeBlock():
 		return self.block[index]
 	def delete(self, start, end):
 		del self.block[start:end]
-	def find(self, x):
+	def find(self, what):
 		# would we actually recursively search, or just return "nope"?
+		# for item in self.block:
+		# 	x, it = item.find(what)
+		# 	if x != -1:
+		# 		return x, it
 		return -1
 	def insert(self, i, x):
 		if not type(x) is list:

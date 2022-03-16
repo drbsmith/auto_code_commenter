@@ -34,6 +34,22 @@ def doClassInit(codeblock):
 	members = codeblock.getMembers(args[0])
 
 	# TODO: we need the line #s and then to stick a new comment line above each...
+	for member in members:
+		word = "{}.{}".format(args[0], member)
+
+		# we'll loop through the lines here, but this is not good style. Should make this a class function.
+		for item, i in zip(codeblock.block, range(0, len(codeblock.block))):
+			if item.find(word) > -1:
+				break
+
+		if i < len(codeblock.block):
+			# check previous line, is it a comment already?
+			if CodeLine.RemoveLeadingWhitespace(codeblock.block[i-1])[:2] != '##':
+				ind = codeblock.block[i].indent()
+				codeblock.block[i:i] = [CodeLine("## TODO_DOC: what is {} class member variable?".format(member)).indent(ind)]
+
+	codeblock.indent()
+	print(codeblock)
 
 def main(filename, FORCE):
 
