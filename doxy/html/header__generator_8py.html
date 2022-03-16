@@ -128,9 +128,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="head
 <tr class="memitem:a7cee890e1289ae33ca930fef891060f7"><td class="memItemLeft" align="right" valign="top"><a id="a7cee890e1289ae33ca930fef891060f7"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>src.header_generator.INCLUDE_PACKAGES</b> = True</td></tr>
 <tr class="separator:a7cee890e1289ae33ca930fef891060f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51c19a6253e792b82639f17ba3643785"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header__generator_8py.html#a51c19a6253e792b82639f17ba3643785">src.header_generator.HEADER_TEMPLATE</a></td></tr>
-<tr class="memdesc:a51c19a6253e792b82639f17ba3643785"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template used to generate the header block.  <a href="header__generator_8py.html#a51c19a6253e792b82639f17ba3643785">More...</a><br /></td></tr>
-<tr class="separator:a51c19a6253e792b82639f17ba3643785"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a211e8e28ae81118c8bd5504e5838a790"><td class="memItemLeft" align="right" valign="top"><a id="a211e8e28ae81118c8bd5504e5838a790"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>src.header_generator.config</b> = GetGlobalConfig()</td></tr>
+<tr class="separator:a211e8e28ae81118c8bd5504e5838a790"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca7e940858e06e22e7c101448a9f0f08"><td class="memItemLeft" align="right" valign="top"><a id="aca7e940858e06e22e7c101448a9f0f08"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>src.header_generator.HEADER_TEMPLATE</b> = config['HEADER_TEMPLATE']</td></tr>
+<tr class="separator:aca7e940858e06e22e7c101448a9f0f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7bdbf9f810b92d8a9c9477d1781a9e6b"><td class="memItemLeft" align="right" valign="top"><a id="a7bdbf9f810b92d8a9c9477d1781a9e6b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header__generator_8py.html#a7bdbf9f810b92d8a9c9477d1781a9e6b">src.header_generator.RENAME_ORIGINAL</a> = True</td></tr>
 <tr class="memdesc:a7bdbf9f810b92d8a9c9477d1781a9e6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rename original: keeps the original source file with a new suffix. <br /></td></tr>
@@ -140,15 +143,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="head
 <tr class="separator:a63e6829a2b9b7a8c6d16ad2ea5f4aa54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1><a class="anchor" id="autotoc_md12"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md13"></a>
 Header Generator</h1>
 <p>Checks for the presence of a header block (this comment block), and either fills it in, or replaces it if forced.</p>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Classes</h2>
 <ul>
 <li>headerClass</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 Functions</h2>
 <ul>
 <li>CheckForHeader</li>
@@ -196,7 +199,7 @@ Functions</h2>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TODO_DOC</dd></dl>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 Profile</h2>
 <ul>
 <li>line count: 36</li>
@@ -229,7 +232,7 @@ Profile</h2>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TODO_DOC</dd></dl>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 Profile</h2>
 <ul>
 <li>line count: 46</li>
@@ -290,7 +293,7 @@ Profile</h2>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TODO_DOC</dd></dl>
-<h2><a class="anchor" id="autotoc_md15"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Profile</h2>
 <ul>
 <li>line count: 15</li>
@@ -324,7 +327,7 @@ Profile</h2>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TODO_DOC</dd></dl>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 Profile</h2>
 <ul>
 <li>line count: 15</li>
@@ -379,7 +382,7 @@ Profile</h2>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TODO_DOC</dd></dl>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 Profile</h2>
 <ul>
 <li>line count: 8</li>
@@ -387,37 +390,6 @@ Profile</h2>
 <li>imports: from util.util_parsing import flatten, packages = [item.imports() for item in code_lines]</li>
 <li>returns: packages </li>
 </ul>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="a51c19a6253e792b82639f17ba3643785"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51c19a6253e792b82639f17ba3643785">&#9670;&nbsp;</a></span>HEADER_TEMPLATE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">string src.header_generator.HEADER_TEMPLATE</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;=  <span class="stringliteral">&#39;&#39;&#39;&quot;&quot;&quot;! @file</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="stringliteral"># {}</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="stringliteral">TODO_DOC</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="stringliteral">[PACKAGES]</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="stringliteral">[CLASSES]</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="stringliteral">[FUNCTIONS]</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral">[POST]</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">@package {}&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral">&#39;&#39;&#39;</span></div>
-</div><!-- fragment -->
-<p>Template used to generate the header block. </p>
-<p>TODO: move to a file that can be specified without modifying this code. </p>
 
 </div>
 </div>

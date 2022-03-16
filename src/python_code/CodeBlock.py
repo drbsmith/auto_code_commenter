@@ -15,10 +15,11 @@ from python_code.CodeLine import CodeLine
 DEFAULT_INDENT = '\t'
 
 ## DEBUG : If True will cause extra prints and text added to string conversions
-DEBUG = True
+DEBUG = False
 
 class CodeBlock():
 	def __init__(self, items):
+		## (list) all of the elements that make up our block of code.
 		self.block = items
 		self.type = 'block'
 		self.parent = None
@@ -41,6 +42,7 @@ class CodeBlock():
 		return ret
 
 	def __print__(self):
+		"""! @param self: instance to print. """
 		print(str(self))
 	def __len__(self):
 		return len(self.block)
@@ -109,10 +111,6 @@ class CodeBlock():
 					if len(s) > 0 and s[-1] == ':':
 						tab += DEFAULT_INDENT
 
-			# block = [x.indent(tab+DEFAULT_INDENT) for x in self.block]
-			# # first line has no indentation:
-			# block[0] = block[0].indent(tab)
-
 			return CodeBlock(block)
 		else:
 			# return first not '' indent:
@@ -142,16 +140,16 @@ class CodeBlock():
 				logging.debug('found {} arguments for function: "{}"'.format(len(args), item))
 				return args
 		else: return None
-	def getReturns(self):
-		"""! if we're a function, do we return anything? """
-		if self.isFunction():
-			ret = []
-			for item in self.block:
-				if item.find('return') > -1:
-					ret.append( item.line[item.find('return') + 7 : ] )
-			return ret
-		else:
-			return None
+	# def getReturns(self):
+	# 	"""! if we're a function, do we return anything? """
+	# 	if self.isFunction():
+	# 		ret = []
+	# 		for item in self.block:
+	# 			if item.find('return') > -1:
+	# 				ret.append( item.line[item.find('return') + 7 : ] )
+	# 		return ret
+	# 	else:
+	# 		return None
 
 	def isClass(self):
 		for item in self.block:
@@ -166,15 +164,53 @@ class CodeBlock():
 			if name:
 				return name
 
-	def getImports(self):
-		"""! do we have any import lines? If yes, return the packages imported """
+	# def getImports(self):
+	# 	"""! do we have any import lines? If yes, return the packages imported """
+	# 	ret = []
+	# 	for item in self.block:
+	# 		if item.find('import ') > -1:
+	# 			ret.append(item.line)
+	# 	if len(ret) > 0:
+	# 		return ret
+	# 	else: return None
+	def imports(self):
+		from util.util_parsing import flatten
+
+		ret = [x.imports() for x in self.block]
+		ret = [r for r in ret if r]
+		ret = flatten(ret)
+		return ret
+	def returns(self):
+		from util.util_parsing import flatten
+
+		ret = [x.returns() for x in self.block]
+		ret = [r for r in ret if r]
+		ret = flatten(ret)
+		return ret
+
+	# ----
+	def getAllFunctions(self):
+		"""! Look through our block and pull out any sub-function blocks. Usually used by classes. """
 		ret = []
 		for item in self.block:
-			if item.find('import ') > -1:
-				ret.append(item.line)
+			if type(item) is CodeBlock and item.isFunction():
+				# return the collection of all function blocks. They can be modified externally.
+				ret.append(item)
 		if len(ret) > 0:
 			return ret
 		else: return None
+
+	def getMembers(self, cls='self'):
+		"""! if we are a function within a class, look for members with the pattern 'cls.x' """
+		from util.util_parsing import flatten
+
+		ret = [item.getMembers(cls) for item in self.block]
+		ret = [r for r in ret if r]
+		ret = flatten(ret)
+		# convert to set to get distinct values, then back to list
+		return list(set(ret))
+
+	# --- Documentation methods ---- #
 
 	def hasDocumentation(self):
 		"""! Does our block have a doc string in it? """
@@ -223,14 +259,6 @@ class CodeBlock():
 		if len(ret) > 0:
 			return ret
 		else: return None
-
-	def imports(self):
-		from util.util_parsing import flatten
-
-		ret = [x.imports() for x in self.block]
-		ret = [r for r in ret if r]
-		ret = flatten(ret)
-		return ret
 
 	@classmethod
 	def __split_module(cls, lines):

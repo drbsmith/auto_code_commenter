@@ -192,6 +192,36 @@ class CodeLine():
 					y = self.getLastFunctionalPos() #  if there is a trailing comment on the line we'll ignore it
 					return self.line[x+7:y]
 		return None
+	def returns(self):
+		if not self.inDocString and 'return ' in self.line:
+			x = self.line.find('return ')
+			if not CodeLine.inComment(self.line, x) and not CodeLine.inLiteral(self.line, x):
+				# it's a functional return. Now check for a 'from' clause
+				y = self.getLastFunctionalPos() #  if there is a trailing comment on the line we'll ignore it
+				return self.line[x+7:y]
+		return None
+
+	def getMembers(self, c='self'):
+		x = self.line.find(c + '.')
+
+		if x < 0:
+			return None
+		else:
+			from util.util_parsing import PUNCTUATION, WHITE_SPACE
+
+			line0 = self.line[x+len(c)+1 : ]
+			member = ''
+			for l in line0:
+				if not l in PUNCTUATION and not l in WHITE_SPACE:
+					member += l
+				else:
+					if l == '(':
+						# it's a method, not a member.
+						return None
+					else:
+						return member
+
+	# ---- Utilities ---- #
 
 	def removeLeadingWhitespace(self):
 		self.line = CodeLine.RemoveLeadingWhitespace(self.line)

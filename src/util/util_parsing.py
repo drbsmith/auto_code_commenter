@@ -27,6 +27,9 @@ import logging
 
 WHITE_SPACE = [' ', '\t']
 
+## list of characters that comprise functional punctuation and math operators in Python
+PUNCTUATION = ['[', ']', '(', ')', '{', '}', ';', ':', '&', '|', '*', '-', '/', '+', '%', '^', '=']
+
 def StripLeadingWhitespace(line: str):
 	"""!
 	Take off all leading whitespace from a string and return the stripped string.

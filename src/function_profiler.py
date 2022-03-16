@@ -35,10 +35,10 @@ def ProfileFunction(code_lines):
 	out_dict['characters'] = code_lines.getTotalBytes() # sum(lengths)
 
 	# does it return anything?
-	returns = code_lines.getReturns()
+	returns = code_lines.returns()
 
 	# does it import anything?
-	imports = code_lines.getImports()
+	imports = code_lines.imports()
 	# for line in code_lines:
 	# 	if 'import' in line and not IsComment(line):
 	# 		# what?

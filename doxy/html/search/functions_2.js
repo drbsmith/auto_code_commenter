@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['checkfordocumentation_101',['CheckForDocumentation',['../function__documenter_8py.html#a6d5e6048f6e25206de575ad9e6792387',1,'src::function_documenter']]],
-  ['checkforheader_102',['CheckForHeader',['../header__generator_8py.html#a7287755737d6d1057d6ca1367836784b',1,'src::header_generator']]]
+  ['buildfunctionblock_106',['BuildFunctionBlock',['../function__documenter_8py.html#a8b30ac0a261d4d4ec4742a2304e2abca',1,'src::function_documenter']]],
+  ['buildheader_107',['BuildHeader',['../header__generator_8py.html#a2109cc65c43ce340ff9b8c963c5aed17',1,'src::header_generator']]]
 ];

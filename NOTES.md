@@ -4,6 +4,7 @@
 
 * build a graph structure for a package, one file for each module, that describes how classes/functions import or call each other
 * what is preferred documentation style for decorators? Does doxygen scrape those automatically? How does it show inheritance for Python?
+* add param tag to config. '@param xxx:' for doxygen, ':param xxx:' for sphinx.
 
 ## 2022-03-10
 

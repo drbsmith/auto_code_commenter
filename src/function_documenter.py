@@ -155,10 +155,27 @@ def BuildFunctionBlock(params=None, profile=None, comments=None):
 
 	return(lines)
 
-def main(filename, FORCE=False):
+def DocumentFunction(codeblock):
 
-	# from py_parsers import ParsePyScript, GetIndent
-	# code_lines, code_raw = ParsePyScript(filename)
+	params = codeblock.getArguments()
+	text = MakeParamBlock(params)
+
+	if INCLUDE_FUNCTION_PROFILE:
+		from function_profiler import ProfileFunction, ProfileDictToLines
+		profile = ProfileDictToLines(ProfileFunction(codeblock))
+	else: profile = None
+
+	if INCLUDE_INLINE_COMMENTS:
+		comm = codeblock.getComments()
+	else: comm = None
+
+	docs = BuildFunctionBlock(params=text, profile=profile, comments=comm)
+	ind = codeblock.indent(None)
+	docs = [c.indent(ind) for c in docs]
+	
+	codeblock.addDocumentation(docs)
+
+def main(filename, FORCE=False):
 
 	with open(filename, 'r') as f:
 		raw = f.read()
@@ -183,23 +200,7 @@ def main(filename, FORCE=False):
 				else:
 					cb.removeDocumentation()
 
-			params = cb.getArguments()
-			text = MakeParamBlock(params)
-
-			if INCLUDE_FUNCTION_PROFILE:
-				from function_profiler import ProfileFunction, ProfileDictToLines
-				profile = ProfileDictToLines(ProfileFunction(cb))
-			else: profile = None
-
-			if INCLUDE_INLINE_COMMENTS:
-				comm = cb.getComments() # ExtractComments(cb)
-			else: comm = None
-
-			docs = BuildFunctionBlock(params=text, profile=profile, comments=comm)
-			ind = cb.indent(None)
-			docs = [c.indent(ind) for c in docs]
-			
-			cb.addDocumentation(docs)
+			DocumentFunction(cb)
 			write_it = True
 
 	code_lines.indent()
