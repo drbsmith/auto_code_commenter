@@ -99,7 +99,7 @@ def PullOutExisting(filename):
 
 	return None
 
-def main(path):
+def CreateInitFile(path):
 	"""!
 	Main function.
 	
@@ -161,4 +161,4 @@ if __name__ == '__main__':
 
 	path = sys.argv[1]
 
-	main(path)
+	CreateInitFile(path)

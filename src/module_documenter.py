@@ -30,7 +30,7 @@ from util.log import setup_logging
 logger = setup_logging()
 
 
-def main(filename, FORCE):
+def main():
 	"""!
 	# Main
 	
@@ -51,12 +51,12 @@ def main(filename, FORCE):
 	
 	FORCE = '-force' in sys.argv
 	
-	from variable_documenter import documentVariables
+	from variable_documenter import DocumentVariables
 	from function_documenter import DocumentFunctions
 	from class_documenter import DocumentClasses
 	from header_generator import AddHeader
 	
-	documentVariables(filename)
+	DocumentVariables(filename)
 	DocumentFunctions(filename, FORCE)
 	DocumentClasses(filename, FORCE)
 	AddHeader(filename)
