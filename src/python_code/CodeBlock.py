@@ -372,6 +372,17 @@ class CodeBlock():
 		ret = flatten(ret)
 		# convert to set to get distinct values, then back to list
 		return list(set(ret))
+
+	def getCalls(self):
+		"""! find any function calls in the block and return those functions. 
+		"""
+		from util.util_parsing import flatten
+		
+		ret = [item.getCalls() for item in self.block]
+		ret = [r for r in ret if r]
+		ret = flatten(ret)
+		return ret
+
 		
 	# --- Documentation methods ---- #
 	

@@ -12,6 +12,6 @@
 		"description": "the annotation for a parameter in a function. @param for doxygen, :param for sphinx."
 	},
 	"CLASS_TEMPLATE": "\"\"\"!\nTODO_DOC\n\n[MEMBERS]\n[CLASS_PROFILE]\n\"\"\"\n",
-	"FUNCTION_TEMPLATE": "\"\"\"!\nTODO_DOC\n[COMMENTS]\n\n[PARAMS]\n@return TODO_DOC\n[FUNC_PROFILE]\n\"\"\"\n",
+	"FUNCTION_TEMPLATE": "\"\"\"!\n# [NAME]\n\nTODO_DOC\n[COMMENTS]\n\n[PARAMS]\n@return TODO_DOC\n[FUNC_PROFILE]\n\"\"\"\n",
 	"HEADER_TEMPLATE": "\"\"\"! @file\n\n# {}\n\nTODO_DOC\n\n[PACKAGES]\n[CLASSES]\n[FUNCTIONS]\n[PROFILE]\n[POST]\n@package {} \"\"\"\n"
 }

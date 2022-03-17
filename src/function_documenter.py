@@ -4,6 +4,9 @@
 
 Scans a .py file, finds any functions missing documentation blocks, parses variables and inserts boilerplate function documentation.
 
+## Arguments
+* -force - overwrite existing function documentation
+* -debug - do not write any changes (leaves original file untouched)
 
 ## Functions
 	* FindFunctions
@@ -116,7 +119,7 @@ def MakeParamBlock(params):
 
 	return out
 
-def BuildFunctionBlock(params=None, profile=None, comments=None):
+def BuildFunctionBlock(name, params=None, profile=None, comments=None):
 	"""!
 	TODO: what does this function do?
 	@param indent: TODO: what does indent variable do?
@@ -126,7 +129,7 @@ def BuildFunctionBlock(params=None, profile=None, comments=None):
 	"""
 
 	# lines = SetIndent(FUNCTION_TEMPLATE.split('\n'), indent)
-	lines = FUNCTION_TEMPLATE.split('\n')
+	lines = FUNCTION_TEMPLATE.replace('[NAME]', name).split('\n')
 	lines = [CodeLine(l) for l in lines]
 
 	if params is None:
@@ -157,6 +160,10 @@ def BuildFunctionBlock(params=None, profile=None, comments=None):
 
 def DocumentFunction(codeblock, INCLUDE_FUNCTION_PROFILE=INCLUDE_FUNCTION_PROFILE, INCLUDE_INLINE_COMMENTS=INCLUDE_INLINE_COMMENTS, ignore_args=[]):
 
+	from util.util_parsing import snakeToTitle
+	name = codeblock.getFunctionName()
+	name = snakeToTitle(name)
+
 	params = codeblock.getArguments()
 	params = [p for p in params if not p in ignore_args]
 	text = MakeParamBlock(params)
@@ -170,13 +177,13 @@ def DocumentFunction(codeblock, INCLUDE_FUNCTION_PROFILE=INCLUDE_FUNCTION_PROFIL
 		comm = codeblock.getComments()
 	else: comm = None
 
-	docs = BuildFunctionBlock(params=text, profile=profile, comments=comm)
+	docs = BuildFunctionBlock(name, params=text, profile=profile, comments=comm)
 	ind = codeblock.indent(None)
 	docs = [c.indent(ind) for c in docs]
 	
 	codeblock.addDocumentation(docs)
 
-def main(filename, FORCE=False):
+def DocumentFunctions(filename, FORCE=False):
 
 	with open(filename, 'r') as f:
 		raw = f.read()
@@ -207,7 +214,7 @@ def main(filename, FORCE=False):
 	code_lines.indent()
 
 	# no changes? don't write anything
-	if write_it:
+	if write_it and not '-debug' in sys.argv:
 		# move original
 		os.rename(filename, filename + '.old')
 		logger.info('moved original file to {}'.format(filename + '.old'))
@@ -230,4 +237,4 @@ if __name__ == "__main__":
 
 	FORCE = '-force' in sys.argv
 
-	main(filename, FORCE)
+	DocumentFunctions(filename, FORCE)

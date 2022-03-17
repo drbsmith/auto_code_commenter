@@ -50,7 +50,7 @@ def doClassInit(codeblock):
 
 	# codeblock.indent()
 
-def main(filename, FORCE):
+def DocumentClasses(filename, FORCE):
 
 	with open(filename, 'r') as f:
 		raw = f.read()
@@ -114,4 +114,4 @@ if __name__ == "__main__":
 
 	FORCE = '-force' in sys.argv
 
-	main(filename, FORCE)
+	DocumentClasses(filename, FORCE)

@@ -116,28 +116,10 @@ def FilenameToTitle(fname):
 	if fname.find('.') != -1:
 		fname = fname[: fname.find('.')]
 
-	# what case is it in? Convert anything to snake, then split to a title
-
-	# test for all upper:
-	if fname.upper() == fname:
-		fname = fname.lower()
-
-	if fname.lower() != fname: # camel
-		x = ''
-		for f in fname:
-			if f.lower() != f:
-				x += '_'
-				x += f.lower()
-			else: x += f
-
-		fname = x
-
-	while fname[0] == '_': # drop leading underscores. Above loop injects one if file has initial caps
-		fname = fname[1:]
-
-	title = fname.replace('_', ' ').title()
-
-	return title # that was fun, let's go!
+	# what case is it in? 
+	from util.util_parsing import snakeToTitle
+	
+	return snakeToTitle(fname) # that was fun, let's go!
 
 def PackageFromFilename(fname: str) -> str:
 	"""!
@@ -286,7 +268,7 @@ def BuildHeader(fname, code_lines):
 
 	return header
 
-def main():
+def AddHeader(filename):
 	"""!
 	TODO_DOC
 	
@@ -298,12 +280,6 @@ def main():
 	* characters: 1249
 	* imports: 	from python_code.CodeBlock import CodeBlock
 	"""
-	
-	if len(sys.argv) < 2:
-		logger.error('missing required path to file argument')
-		return
-
-	filename = sys.argv[1]
 
 	## if True will replace any existing header documentation with a new auto-generated block.
 	FORCE = False
@@ -345,4 +321,10 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	if len(sys.argv) < 2:
+		logger.error('missing required path to file argument')
+		exit(0)
+
+	filename = sys.argv[1]
+
+	AddHeader(filename)

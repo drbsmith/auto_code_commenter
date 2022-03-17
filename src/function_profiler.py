@@ -12,10 +12,10 @@ from python_code.CodeLine import CodeLine
 def ProfileFunction(code_lines):
 	"""!
 	Build a textual profile of the function (total lines, characters, what it imports, returns)
-	
+
 	@param code_lines: CodeLine list that contains the function
 	@return (dict) the profile (see below for an example, March 2022)
-	
+
 	## Profile
 	* line count: 39
 	* characters: 1121
@@ -23,20 +23,20 @@ def ProfileFunction(code_lines):
 	"""
 	if len(code_lines) < 1:
 		return None
-
+		
 	# put together a little dict/statement describing the supplied code.
 	out_dict = {}
-
+	
 	# how many lines? Drop any empty lines, they don't count!
 	out_dict['line count'] = code_lines.getTotalLines() #len([c for c in code_lines if c != ''])
-
+	
 	# how many bytes?
 	# lengths = [len(line) for line in code_lines]
 	out_dict['characters'] = code_lines.getTotalBytes() # sum(lengths)
-
+	
 	# does it return anything?
 	returns = code_lines.returns()
-
+	
 	# does it import anything?
 	imports = code_lines.imports()
 	# for line in code_lines:
@@ -45,57 +45,69 @@ def ProfileFunction(code_lines):
 	# 		imports.append(StripLeadingWhitespace(line))
 	# 	if 'return' in line and not IsComment(line):
 	# 		returns.append(StripLeadingWhitespace(line.replace('return', '')))
-
+	
 	if imports:
 		out_dict['imports'] = [CodeLine.RemoveLeadingWhitespace(i) for i in imports]
 	if returns:
 		out_dict['returns'] = [CodeLine.RemoveLeadingWhitespace(r) for r in returns]
-
+		
 	# TODO: find any internal variables??
 	# ...
-
+	
 	# TODO: find function calls out?
+	calls = code_lines.getCalls()
+	if calls:
+		out_dict['calls'] = calls
+	
 	# TODO: some estimate of complexity?
-
+	
 	return out_dict
-
+	
 def _list2str(x):
 	"""!
+	# List To Str
+	
 	TODO_DOC
 	
 	@param x: TODO_DOC
 	@return TODO_DOC
 	
 	## Profile
-	* line count: 8
+	* line count: 9
 	* characters: 79
 	* returns: out[:-2]
+	* calls: _list2str, .format
 	"""
+	
 	out = ""
-
+	
 	for y in x:
 		out += '{}, '.format(y)
-
+		
 	return out[:-2]
-
+	
 def ProfileDictToLines(profile_dict):
 	"""!
+	# Profile Dict To Lines
+
 	TODO_DOC
-	
+
 	@param profile_dict: TODO_DOC
 	@return TODO_DOC
-	
+
 	## Profile
-	* line count: 15
+	* line count: 20
 	* characters: 428
-	* imports: from python_code.CodeLine import CodeLine
-	* returns: ret
+	* imports: python_code.CodeLine
+	* returns: None, ret
+	* calls: ProfileDictToLines, CodeLine, CodeLine, profile_dict.keys, type, ret.append, CodeLine, .format, str, ret.append, CodeLine, .format, _list2str
 	"""
+	
 	if profile_dict is None:
 		return None
-
+		
 	from python_code.CodeLine import CodeLine
-
+	
 	# convert each entry to a line of text
 	ret = [CodeLine(''), CodeLine('## Profile')]
 	for k in profile_dict.keys():
@@ -103,5 +115,12 @@ def ProfileDictToLines(profile_dict):
 			ret.append(CodeLine('* {}: {}'.format(k, str(profile_dict[k]))))
 		else:
 			ret.append(CodeLine('* {}: {}'.format(k, _list2str(profile_dict[k]))))
-
+			
 	return ret
+	
+	
+	
+	
+	
+	
+	

@@ -24,7 +24,7 @@ from util.log import setup_logging
 ## logger : handle to global logging
 logger = setup_logging()
 
-def main(filename):
+def DocumentVariables(filename):
 	"""!
 	TODO_DOC
 	- if True will replace any existing variable documentation with new auto-generated lines.
@@ -95,7 +95,7 @@ def main(filename):
 	else:
 		logger.info('no changes were made.')
 
-if __name__ == '__main__':
+def main():
 	if len(sys.argv) < 2:
 		logger.error('missing required path to file argument')
 		exit()
@@ -106,9 +106,11 @@ if __name__ == '__main__':
 		logger.error("{} doesn't exist.".format(filename))
 		exit(0)
 
-	main(filename)
+	DocumentVariables(filename)
 
 
+if __name__ == '__main__':
+	main()
 
 
 

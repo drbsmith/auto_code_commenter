@@ -1,10 +1,8 @@
 """! @file
 
-# Code Block
+# Function Profiler
 
-Represents one functional block of code (in python usually indicated with a leading line terminated with a colon ':', and all subsequent lines indented one level).
-
-Q: have one list of all lines/blocks, or split into the 'definition' line and then a list of all sub-items? (the indented lines/blocks)
+Build a textual profile for a function.
 
 @package python"""
 
@@ -12,58 +10,89 @@ Q: have one list of all lines/blocks, or split into the 'definition' line and th
 from python_code.CodeLine import CodeLine
 
 def ProfileFunction(code_lines):
+	"""!
+	Build a textual profile of the function (total lines, characters, what it imports, returns)
+
+	@param code_lines: CodeLine list that contains the function
+	@return (dict) the profile (see below for an example, March 2022)
+
+	## Profile
+	* line count: 39
+	* characters: 1121
+	* returns: anything?, = code_lines.getReturns(), in line and not IsComment(line):, .append(StripLeadingWhitespace(line.replace('return', ''))), out_dict
+	"""
 	if len(code_lines) < 1:
 		return None
-	
+		
 	# put together a little dict/statement describing the supplied code.
 	out_dict = {}
-
+	
 	# how many lines? Drop any empty lines, they don't count!
 	out_dict['line count'] = code_lines.getTotalLines() #len([c for c in code_lines if c != ''])
-
+	
 	# how many bytes?
 	# lengths = [len(line) for line in code_lines]
 	out_dict['characters'] = code_lines.getTotalBytes() # sum(lengths)
-
+	
 	# does it return anything?
-	returns = code_lines.getReturns()
-
+	returns = code_lines.returns()
+	
 	# does it import anything?
-	imports = code_lines.getImports()
+	imports = code_lines.imports()
 	# for line in code_lines:
 	# 	if 'import' in line and not IsComment(line):
 	# 		# what?
 	# 		imports.append(StripLeadingWhitespace(line))
 	# 	if 'return' in line and not IsComment(line):
 	# 		returns.append(StripLeadingWhitespace(line.replace('return', '')))
-
+	
 	if imports:
 		out_dict['imports'] = [CodeLine.RemoveLeadingWhitespace(i) for i in imports]
 	if returns:
 		out_dict['returns'] = [CodeLine.RemoveLeadingWhitespace(r) for r in returns]
-
+		
 	# TODO: find any internal variables??
 	# ...
-
+	
 	# TODO: find function calls out?
+	out_dict['calls'] = code_lines.getCalls()
+	
 	# TODO: some estimate of complexity?
-
+	
 	return out_dict
-
+	
 def _list2str(x):
+	
 	out = ""
-
+	
 	for y in x:
 		out += '{}, '.format(y)
-
+		
 	return out[:-2]
-
+	
 def ProfileDictToLines(profile_dict):
+	"""!
+	# Profile Dict To Lines
+
+	TODO_DOC
+
+	@param profile_dict: TODO_DOC
+	@return TODO_DOC
+
+	## Profile
+	* line count: 20
+	* characters: 428
+	* imports: python_code.CodeLine
+	* returns: None, ret
+	* calls: ProfileDictToLines, CodeLine, CodeLine, profile_dict.keys, type, ret.append, CodeLine, .format, str, ret.append, CodeLine, .format, _list2str
+	"""
+	
+	
 	if profile_dict is None:
-		return None	
-
+		return None
+		
 	from python_code.CodeLine import CodeLine
-
+	
 	# convert each entry to a line of text
 	ret = [CodeLine(''), CodeLine('## Profile')]
 	for k in profile_dict.keys():
@@ -71,5 +100,11 @@ def ProfileDictToLines(profile_dict):
 			ret.append(CodeLine('* {}: {}'.format(k, str(profile_dict[k]))))
 		else:
 			ret.append(CodeLine('* {}: {}'.format(k, _list2str(profile_dict[k]))))
-
+			
 	return ret
+	
+	
+	
+	
+	
+	

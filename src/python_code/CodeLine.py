@@ -221,11 +221,45 @@ class CodeLine():
 					else:
 						return member
 
+	def getCalls(self):
+		"""! 
+		Do this by identifying () that are not logic/math
+		"""
+
+		if not '(' in self.line:
+			return None
+
+		calls = []
+
+		line0 = self.line
+		while '(' in line0:
+			name, x = CodeLine._get_called_function_name(line0)
+			line0 = line0[x+1:]
+			calls.append(name)
+
+		return calls
+
 	# ---- Utilities ---- #
 
 	def removeLeadingWhitespace(self):
 		self.line = CodeLine.RemoveLeadingWhitespace(self.line)
-						
+			
+	@classmethod
+	def _get_called_function_name(cls, line0):
+		from util.util_parsing import PUNCTUATION, WHITE_SPACE
+
+		x0 = line0.find('(')
+		xr = len(line0) - x0
+
+		rev = line0[::-1]
+		for c, i in zip(rev[xr:], range(xr, len(rev))):
+			if (c in PUNCTUATION or c in WHITE_SPACE) and c != '.':
+				y0 = len(line0) - i
+				name = line0[y0:x0]
+				return name, x0
+		# got to start of the line
+		return line0[:x0], x0
+
 	@classmethod
 	def inComment(cls, line, pos):
 		"""! test if a position in a string is within a comment (or docstring) """

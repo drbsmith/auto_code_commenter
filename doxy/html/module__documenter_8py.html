@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Auto Code Commenter: src/module_profiler.py File Reference</title>
+<title>Auto Code Commenter: src/module_documenter.py File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,7 +70,7 @@ $(function() {
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">module_profiler.py File Reference</div>  </div>
+<div class="title">module_documenter.py File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
@@ -81,104 +81,93 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a71e14027071509d53997b0f6527b8d4e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="module__profiler_8py.html#a71e14027071509d53997b0f6527b8d4e">src.module_profiler.ProfileModule</a> (codeblock)</td></tr>
-<tr class="memdesc:a71e14027071509d53997b0f6527b8d4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a textual profile for a module.  <a href="module__profiler_8py.html#a71e14027071509d53997b0f6527b8d4e">More...</a><br /></td></tr>
-<tr class="separator:a71e14027071509d53997b0f6527b8d4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a479bfd0c60fb34a71623edec9cd8506a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="module__profiler_8py.html#a479bfd0c60fb34a71623edec9cd8506a">src.module_profiler.ProfileToLines</a> (profile)</td></tr>
-<tr class="memdesc:a479bfd0c60fb34a71623edec9cd8506a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a profile dictionary to a list of formatted lines.  <a href="module__profiler_8py.html#a479bfd0c60fb34a71623edec9cd8506a">More...</a><br /></td></tr>
-<tr class="separator:a479bfd0c60fb34a71623edec9cd8506a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a938c644bf1f89d95f44196c0c9a87528"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="module__documenter_8py.html#a938c644bf1f89d95f44196c0c9a87528">src.module_documenter.main</a> (filename, FORCE)</td></tr>
+<tr class="separator:a938c644bf1f89d95f44196c0c9a87528"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a3152082bf84a7554815d859d94cb2139"><td class="memItemLeft" align="right" valign="top"><a id="a3152082bf84a7554815d859d94cb2139"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>src.module_profiler.logger</b> = setup_logging('header_generator.py')</td></tr>
-<tr class="separator:a3152082bf84a7554815d859d94cb2139"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ef3dfee0b82885b4bccc0c4389ea42c"><td class="memItemLeft" align="right" valign="top"><a id="a9ef3dfee0b82885b4bccc0c4389ea42c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="module__documenter_8py.html#a9ef3dfee0b82885b4bccc0c4389ea42c">src.module_documenter.logger</a> = setup_logging()</td></tr>
+<tr class="memdesc:a9ef3dfee0b82885b4bccc0c4389ea42c"><td class="mdescLeft">&#160;</td><td class="mdescRight">logger : TODO_DOC <br /></td></tr>
+<tr class="separator:a9ef3dfee0b82885b4bccc0c4389ea42c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66370df0b7062b9acaf84d61f4d1aae2"><td class="memItemLeft" align="right" valign="top"><a id="a66370df0b7062b9acaf84d61f4d1aae2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>src.module_documenter.filename</b> = sys.argv[1]</td></tr>
+<tr class="separator:a66370df0b7062b9acaf84d61f4d1aae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0962324235444fe20a64bca671989a92"><td class="memItemLeft" align="right" valign="top"><a id="a0962324235444fe20a64bca671989a92"></a>
+string&#160;</td><td class="memItemRight" valign="bottom"><b>src.module_documenter.FORCE</b> = '-force' in sys.argv</td></tr>
+<tr class="separator:a0962324235444fe20a64bca671989a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1><a class="anchor" id="autotoc_md34"></a>
-Module Profiler</h1>
-<p>TODO_DOC</p>
-<h2><a class="anchor" id="autotoc_md35"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md28"></a>
+Module Documenter</h1>
+<p>Runs all the documentation generating functions on one file (python module)</p>
+<h2><a class="anchor" id="autotoc_md29"></a>
 Dependencies</h2>
 <ul>
+<li>header_generator</li>
+<li>variable_documenter</li>
+<li>function_documenter</li>
 <li>sys, os</li>
 <li>util.log</li>
-<li>python_code.CodeBlock</li>
-<li>python_code.CodeLine</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md36"></a>
+<h2><a class="anchor" id="autotoc_md30"></a>
 Functions</h2>
 <ul>
-<li>ProfileModule</li>
-<li>ProfileToLines</li>
+<li>main</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md37"></a>
+<h2><a class="anchor" id="autotoc_md31"></a>
 Profile</h2>
 <ul>
-<li>number of lines: 51</li>
+<li>number of lines: 54</li>
 <li>number of characters: 796</li>
-<li>number of functions: 2</li>
+<li>number of functions: 1</li>
 </ul>
-<p>[generated by Auto Code Commenter at 2022-03-16 15:10:22. <a href="https://github.com/drbsmith/auto_code_commenter">https://github.com/drbsmith/auto_code_commenter</a>] </p>
+<p>[generated by Auto Code Commenter at 2022-03-17 13:48:17. <a href="https://github.com/drbsmith/auto_code_commenter">https://github.com/drbsmith/auto_code_commenter</a>] </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a71e14027071509d53997b0f6527b8d4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71e14027071509d53997b0f6527b8d4e">&#9670;&nbsp;</a></span>ProfileModule()</h2>
+<a id="a938c644bf1f89d95f44196c0c9a87528"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a938c644bf1f89d95f44196c0c9a87528">&#9670;&nbsp;</a></span>main()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def src.module_profiler.ProfileModule </td>
+          <td class="memname">def src.module_documenter.main </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>codeblock</em></td><td>)</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>FORCE</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Build a textual profile for a module. </p>
+<h1><a class="anchor" id="autotoc_md32"></a>
+Main</h1>
+<p>TODO_DOC</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">codeblock</td><td>code for the module to generate a profile for </td></tr>
+    <tr><td class="paramname">filename</td><td>TODO_DOC </td></tr>
+    <tr><td class="paramname">FORCE</td><td>TODO_DOC </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>(dict) the module profile</dd></dl>
-<h2><a class="anchor" id="autotoc_md38"></a>
+<dl class="section return"><dt>Returns</dt><dd>TODO_DOC</dd></dl>
+<h2><a class="anchor" id="autotoc_md33"></a>
 Profile</h2>
 <ul>
-<li>line count: 11</li>
-<li>characters: 238</li>
-<li>returns: profile </li>
+<li>line count: 12</li>
+<li>characters: 326</li>
+<li>imports: variable_documenter, function_documenter, class_documenter, header_generator</li>
+<li>calls: main, documentVariables, DocumentFunctions, DocumentClasses, AddHeader </li>
 </ul>
-
-</div>
-</div>
-<a id="a479bfd0c60fb34a71623edec9cd8506a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a479bfd0c60fb34a71623edec9cd8506a">&#9670;&nbsp;</a></span>ProfileToLines()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def src.module_profiler.ProfileToLines </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>profile</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert a profile dictionary to a list of formatted lines. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">profile</td><td>dictionary of the profile </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>list of CodeLines </dd></dl>
 
 </div>
 </div>
