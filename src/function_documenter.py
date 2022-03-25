@@ -119,7 +119,7 @@ def MakeParamBlock(params):
 
 	return out
 
-def BuildFunctionBlock(name, params=None, profile=None, comments=None):
+def BuildFunctionBlock(name, params=None, profile=None, comments=None, returns=None):
 	"""!
 	TODO: what does this function do?
 	@param indent: TODO: what does indent variable do?
@@ -131,6 +131,10 @@ def BuildFunctionBlock(name, params=None, profile=None, comments=None):
 	# lines = SetIndent(FUNCTION_TEMPLATE.split('\n'), indent)
 	lines = FUNCTION_TEMPLATE.replace('[NAME]', name).split('\n')
 	lines = [CodeLine(l) for l in lines]
+
+	# if it returns None we can strip out the @return tag
+	if returns is None or returns == []:
+		lines = [l for l in lines if not 'return' in l]
 
 	if params is None:
 		lines = [l for l in lines if not '[PARAMS]' in l]  # remove the placeholder
@@ -177,7 +181,9 @@ def DocumentFunction(codeblock, INCLUDE_FUNCTION_PROFILE=INCLUDE_FUNCTION_PROFIL
 		comm = codeblock.getComments()
 	else: comm = None
 
-	docs = BuildFunctionBlock(name, params=text, profile=profile, comments=comm)
+	returns = codeblock.returns()
+
+	docs = BuildFunctionBlock(name, params=text, profile=profile, comments=comm, returns=returns)
 	ind = codeblock.indent(None)
 	docs = [c.indent(ind) for c in docs]
 	
