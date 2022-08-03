@@ -1,11 +1,20 @@
+"""! @file
 
+# Generate Docs for a database
+
+Builds a file structure of .md files that can then be processed using Doxygen.
+
+## Arguments
+
+python3 src/document_database.py root host database user password (port) (schema)
+
+@package src """
 
 
 
 import sys, os
 
 from util.log import setup_logging
-## logger : TODO_DOC
 logger = setup_logging()
 
 
@@ -22,10 +31,12 @@ def main():
 
 	settings = ConnectionSettings()
 
-	settings.user=os.getenv("DBUSER")
-	settings.password=os.getenv("DBPASS")
-	settings.host='127.0.0.1'
-	settings.database="boardable"
+	settings.host_name=sys.argv[2]
+	settings.database=sys.argv[3]
+	settings.user=sys.argv[4]
+	settings.password=sys.argv[5]
+	if len(sys.argv) > 6:
+		settings.port = sys.argv[6]
 
 	from sql_databases.mysql_utils import Mysql
 
@@ -59,9 +70,11 @@ def main():
 
 
 if __name__ == '__main__':
-	if len(sys.argv) < 2:
-		logger.error('missing required path to directory argument')
+	if len(sys.argv) < 6:
+		logger.error('missing required arguments: root_directory host database user password')
 		exit()
+
+	print(sys.argv)
 		
 	try:
 		main()

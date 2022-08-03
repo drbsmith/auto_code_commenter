@@ -1,0 +1,19 @@
+#
+###### pip requirements ######
+#
+
+# ssh tunneling if executing outside the VPN
+paramiko >= 2.7.2
+sshtunnel >= 0.3.1
+oauth2client >= 4.1.3
+
+# db accessors
+mysql-connector-python >= 8.0.22
+
+# NOTE: on Mac this requires: brew install postgresql
+psycopg2 >= 2.8.6
+psycopg2-binary >= 2.8.6
+# pandas-redshift >= 2.0.4
+
+# json format logging
+python-json-logger >= 2.0.1

@@ -4,6 +4,13 @@ Scans through python code and scaffolds out the comment blocks used by Doxygen t
 
 ## Getting Started
 
+Note: requires postgresql package installed via Homebrew:
+```brew install postgresql```
+
+Install python libraries:
+
+```python3 -m pip install -r requirements.txt```
+
 ## Gotchas: Compatibility
 
 __Multi-lines__: This code base relies on functional single lines of code, and does not play well with multi-line statements (with the '\\' joiner) or multi-statement lines (with ';'). In both cases the parser will create single-statement lines and remove the '\\' and ';' markers. This does not change the function of the code, but will alter the coding style, if the code base uses those patterns.

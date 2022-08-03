@@ -3,7 +3,7 @@
 import logging
 # connecting assisting functions, wrappers around psycopg
 
-def QueryDatabase(query, SETTINGS=None, SCHEMA=None, SSH=None):
+def QueryDatabase(query, SETTINGS=None, SCHEMA=None, SSH=None, MYSQL=True):
 	"""! Query either the 'data lake' postgres db, or the heap-rs3 'data warehouse'. """
 	if SSH:
 		try:
@@ -21,6 +21,31 @@ def QueryDatabase(query, SETTINGS=None, SCHEMA=None, SSH=None):
 				host='127.0.0.1',
 				database=SETTINGS.database,
 				port=prod_tunnel.local_bind_port)
+			mycursor = mydb.cursor()
+			mycursor.execute(query)
+			res = mycursor.fetchall()
+
+			mycursor.close()
+			mydb.close()
+			
+			return res
+		except mysql.connector.errors.ProgrammingError:
+			logging.error(query, exc_info=True)
+
+			exit()
+		finally:
+			mycursor.close()
+			mydb.close()
+	elif MYSQL:
+		import mysql.connector
+
+		try:
+			mydb = mysql.connector.connect(
+				user=SETTINGS.user,
+				password=SETTINGS.password,
+				host=SETTINGS.host_name,
+				database=SETTINGS.database,
+				port=SETTINGS.port)
 			mycursor = mydb.cursor()
 			mycursor.execute(query)
 			res = mycursor.fetchall()
@@ -78,6 +103,9 @@ class ConnectionSettings():
 	user = ''
 	options = ''
 	port = 5432
+
+	def __str__(this):
+		return '{}, {}, {}, {}, {}, {}'.format(this.host_name, this.password, this.database, this.user, this.options, this.port)
 
 
 def _getDbConnectionSettings(DATABASE="store", SCHEMA=None):

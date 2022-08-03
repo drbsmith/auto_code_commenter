@@ -1,4 +1,8 @@
+"""! @file
 
+Note: checks for presence of .env variable SSH_HOST, and if found will create an SSH tunnel to access the db.
+
+@package sql_databases """
 
 
 
@@ -33,15 +37,16 @@ class Mysql():
 			ORDER BY
 				ordinal_position;"""
 
-		columns = QueryDatabase(query, SETTINGS=self.settings, SSH=True)
+		ssh_req = (not os.getenv('SSH_HOST') is None)
+		columns = QueryDatabase(query, SETTINGS=self.settings, SSH=ssh_req, MYSQL=True)
 	
 		data = QueryDatabase("""SELECT
 				*
 			FROM
 				`INFORMATION_SCHEMA`.`COLUMNS` 
 			WHERE
-				`TABLE_SCHEMA` = 'boardable';""",
-			SETTINGS=self.settings, SSH=True)
+				`TABLE_SCHEMA` = '{}';""".format(self.settings.database),
+			SETTINGS=self.settings, SSH=ssh_req, MYSQL=True)
 
 		table = []
 		for dat in data:
