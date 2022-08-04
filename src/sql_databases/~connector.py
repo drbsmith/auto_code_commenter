@@ -104,6 +104,9 @@ class ConnectionSettings():
 	options = ''
 	port = 5432
 
+	def __str__(this):
+		return '{}, {}, {}, {}, {}, {}'.format(this.host_name, this.password, this.database, this.user, this.options, this.port)
+
 
 def _getDbConnectionSettings(DATABASE="store", SCHEMA=None):
 	global rs_tunnel

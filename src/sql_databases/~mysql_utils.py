@@ -1,4 +1,8 @@
+"""! @file
 
+Note: checks for presence of .env variable SSH_HOST, and if found will create an SSH tunnel to access the db.
+
+@package sql_databases """
 
 
 
@@ -16,33 +20,23 @@ class Mysql():
 	def __init__(self, settings):
 		self.settings = settings
 		self.schema = None
-		self.version = ''
-		self.db_name = ''
-
-		# initialize our data
-		self.GetSchema()
 
 	def GetSchema(self):
 		if not self.schema is None:
 			return self.schema
-		ssh_req = (not os.getenv('SSH_HOST') is None)
 
-		self.db_name = self.settings.database
-
-		self.version = QueryDatabase("SELECT VERSION();", SETTINGS=self.settings, SSH=ssh_req, MYSQL=True)
-		self.version = self.version[0][0]
-
-		# get a mysql database table
+		# get columns in the information_schema table first.
 		query = """SELECT
 				`COLUMN_NAME`
 			FROM
 				`INFORMATION_SCHEMA`.`COLUMNS`
 			WHERE
 				TABLE_NAME = 'COLUMNS'
-				AND TABLE_SCHEMA = 'INFORMATION_SCHEMA'
+				AND table_schema = 'INFORMATION_SCHEMA'
 			ORDER BY
-				ORDINAL_POSITION;"""
+				ordinal_position;"""
 
+		ssh_req = (not os.getenv('SSH_HOST') is None)
 		columns = QueryDatabase(query, SETTINGS=self.settings, SSH=ssh_req, MYSQL=True)
 	
 		data = QueryDatabase("""SELECT
@@ -62,8 +56,6 @@ class Mysql():
 
 		import pandas as pd
 		df = pd.DataFrame(table)
-		# convert all to lower case
-		df.columns = map(str.lower, df.columns)
 
 		self.schema = df
 
@@ -74,31 +66,22 @@ class Mysql():
 		if self.schema is None:
 			self.GetSchema()
 
-		return list(set(self.schema['table_name']))
+		return list(set(self.schema['TABLE_NAME']))
 
-	def GetOneTable(self, table_name):
-		return self.schema.loc[self.schema['table_name'] == table_name]
+	def GetTable(self, table_name):
+		"""! Get all columns for a specified table. """
+		if self.schema is None:
+			self.GetSchema()
 
-	def MakeNotesTemplate(self):
-		"""! Make a file that can have notes manually written in it, which will then be folded into the markdown files.
-		"""
-		schema = self.schema
-		out = {self.db_name: {}}
+		sdf = self.schema.loc[self.schema['TABLE_NAME']==table_name]
+		table = []
+		for idx, row in sdf.iterrows():
+			entry = {'Column Name':row['COLUMN_NAME'], 'Data Type': row['DATA_TYPE']}
+			table.append(entry)
 
-		tables = self.GetTables()
+		return table
 
-		t_dict = {}
-		for table in tables:
-			tdf = self.GetOneTable(table)
 
-			entry = {}
-			for idx, row in tdf.iterrows(): ### FINISH THIS! - get a dict with an empty string for each column. {'id': '', 'created': '', 'updated': ''...
-				entry[row['column_name']] = ""
-			t_dict[table] = entry
-		out[self.db_name] = t_dict
-
-		return out
-			
 
 
 def main():

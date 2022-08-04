@@ -1,0 +1,173 @@
+
+
+
+
+
+import sys, os
+## p : TODO_DOC
+p = os.path.dirname(os.path.abspath('./src/sql_databases'))
+sys.path.append(p)
+
+from util.log import setup_logging
+## logger : TODO_DOC
+logger = setup_logging()
+
+from sql_databases.connector import ConnectionSettings, QueryDatabase
+
+class Postgres():
+	"""!
+	TODO_DOC
+	
+	[MEMBERS]
+	[CLASS_PROFILE]
+	"""
+	
+	def __init__(self, settings):
+		## TODO_DOC: what is settings class member variable?
+		"""!
+		# Init  
+		
+		TODO_DOC
+		
+		@param settings: TODO_DOC
+		
+		## Profile
+		* line count: 12
+		* characters: 295
+		* calls: __init__, self.GetSchema
+		"""
+		
+		self.settings = settings
+		## TODO_DOC: what is schema class member variable?
+		self.schema = None
+		## TODO_DOC: what is version class member variable?
+		self.version = ''
+		
+		# initialize our data
+		self.GetSchema()
+		
+		
+	def GetSchema(self):
+		"""!
+		# Get Schema
+		
+		TODO_DOC
+		
+		@return TODO_DOC
+		
+		## Profile
+		* line count: 44
+		* characters: 801
+		* imports: pandas as pd
+		* returns: self.schema, self.schema
+		* calls: GetSchema, QueryDatabase, VERSION, QueryDatabase, QueryDatabase, zip, table.append, pd.DataFrame
+		"""
+		
+		if not self.schema is None:
+			return self.schema
+			
+		self.version = QueryDatabase("SELECT VERSION();", SETTINGS=self.settings)
+		self.version = self.version[0][0]
+		
+		# get a mysql database table
+		query = """SELECT
+				column_name
+			FROM
+				information_schema.columns
+			WHERE
+				table_name = 'columns'
+				AND table_schema = 'information_schema'
+			ORDER BY
+				ordinal_position
+				"""
+		
+		columns = QueryDatabase(query, SETTINGS=self.settings)
+		
+		data = QueryDatabase("""SELECT
+				*
+			FROM
+				information_schema.columns
+			WHERE
+				table_schema = 'public'
+				""",
+		SETTINGS=self.settings)
+		
+		table = []
+		for dat in data:
+			entry = {}
+			for col, d in zip(columns, dat):
+				entry[col[0]] = d
+			table.append(entry)
+			
+		import pandas as pd
+		df = pd.DataFrame(table)
+		
+		self.schema = df
+		
+		return self.schema
+		
+	def GetTables(self):
+		"""! Get all table names from our schema """
+		if self.schema is None:
+			self.GetSchema()
+			
+		return list(set(self.schema['table_name']))
+		
+	def GetOneTable(self, table_name):
+		"""!
+		# Get One Table
+		
+		TODO_DOC
+		
+		@param table_name: TODO_DOC
+		@return TODO_DOC
+		
+		## Profile
+		* line count: 4
+		* characters: 108
+		* returns: self.schema.loc[self.schema['table_name'] == table_name.lower()]
+		* calls: GetOneTable, table_name.lower
+		"""
+		
+		return self.schema.loc[self.schema['table_name'] == table_name.lower()]
+		
+		
+def main():
+	"""!
+	# Main
+
+	TODO_DOC
+
+	@param : TODO_DOC
+
+	## Profile
+	* line count: 15
+	* characters: 291
+	* calls: main, ConnectionSettings, os.environ.get, os.environ.get, Postgres, print, db.GetTables
+	"""
+	
+	settings = ConnectionSettings()
+	
+	settings.host_name=os.environ.get('DATASTORE_DB')
+	settings.password=os.environ.get('POSTGRE_P2')
+	settings.user='postgres'
+	settings.database="postgres"
+	# settings.port=prod_tunnel.local_bind_port
+	
+	db = Postgres(settings)
+	
+	print(db.GetTables())
+	
+	return
+	
+if __name__ == '__main__':
+	try:
+		main()
+	except:
+		logger.error(__file__, exc_info=True)
+	finally:
+		# close any open SSH tunnels
+		from sql_databases.connector import CleanUpSSHTunnel
+		CleanUpSSHTunnel()
+		
+		
